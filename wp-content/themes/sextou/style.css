@@ -1,0 +1,46 @@
+/*
+Theme Name: Sextou theme
+Theme URI: sextou
+Author: Dico Didiraja
+Author URI: 
+Description: 
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: 
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+.eventos-wrap {
+	display: flex;
+	justify-content: center;
+}
+
+.card-evento {
+	width: 33%;
+    margin: 0 .2em;
+}
+
+/*.evento-thumb {
+	margin: 0;
+	width: 100%;
+	max-height: 38%;
+	overflow: hidden;
+}*/
+
+.evento-thumb {
+	overflow: hidden;
+	max-width: 100%;
+	height: auto;
+}
+
+.evento-thumb img {
+	max-width: 100%;
+	height: auto;
+}
+
+.card-footer .badge {
+	margin: 0 0.1em;
+}
