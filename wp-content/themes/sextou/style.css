@@ -12,35 +12,3 @@ Tags:
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
 */
-
-.eventos-wrap {
-	display: flex;
-	justify-content: center;
-}
-
-.card-evento {
-	width: 33%;
-    margin: 0 .2em;
-}
-
-/*.evento-thumb {
-	margin: 0;
-	width: 100%;
-	max-height: 38%;
-	overflow: hidden;
-}*/
-
-.evento-thumb {
-	overflow: hidden;
-	max-width: 100%;
-	height: auto;
-}
-
-.evento-thumb img {
-	max-width: 100%;
-	height: auto;
-}
-
-.card-footer .badge {
-	margin: 0 0.1em;
-}

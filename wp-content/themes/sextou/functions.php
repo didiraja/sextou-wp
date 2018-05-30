@@ -109,4 +109,30 @@ function taxonomia_regiao() {
 
 add_action('init', 'taxonomia_regiao');
 
+// adiciona taxonomia de Local
+function taxonomia_local() {
+    
+    $nome = 'Local';
+    $nomePlural = 'Locais';
+    
+    $labels = array(
+        'name' => $nomePlural,
+        'singular_name' => $nome,
+        'add_new_item' => 'Adicionar novo ' . $nome,
+        'edit_item' => 'Editar ' . $nome,
+        'not_found' => 'Nenhum ' . $nome . ' encontrado'   
+    );
+	
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'hierarchical' => true
+    );
+	
+    register_taxonomy('local', 'post', $args);
+    
+}
+
+add_action('init', 'taxonomia_local');
+
 ?>
