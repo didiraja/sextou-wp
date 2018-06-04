@@ -38,7 +38,7 @@
 						
 						<div class="card-body">
 							<p class="h1 card-title">
-								<?php echo mb_strimwidth(get_the_title(), 0, 35, '...'); ?>
+								<?php echo mb_strimwidth(get_the_title(), 0, 40, '...'); ?>
 							</p>
 							
 							<div class="data-local-info">
@@ -69,9 +69,17 @@
 								</div>
 							</div>
 							
-							<p class="card-text"><?= get_the_excerpt(); ?></p>
-							<a href="#>" target="_blank" class="btn btn-outline-primary">Acessar página do evento</a>
-							<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-danger">Acessar página do evento</a>
+							<p class="card-text resumo-evento">
+								<?= mb_strimwidth( get_the_excerpt(), 0, 98, '...'); ?>
+							</p>
+
+							<div class="cta-evento">
+
+								<a href="#>" target="_blank" class="btn btn-primary"><i class="fas fa-ticket-alt"></i> Comprar ingresso</a>
+
+								<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary"><i class="fab fa-facebook-square"></i> Mais Informações</a>
+
+							</div>
 						</div>
 						
 						<div class="card-footer">
