@@ -13,20 +13,26 @@
 	<section id="menu">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-8 mx-auto">
+				<div class="col-md-10 mx-auto">
 					<ul class="lista-categoria text-center">
 						<?php
-
 							$args = array(
 								'orderby' => 'id',
-								'hide_empty' => false,
-								'exclude' => 1
+								'hide_empty' => false
 							);
-							$terms = get_terms($args);
+							$terms = get_terms('cidade', $args);
 							foreach ( $terms as $term ) {
 								echo '<li><a href="'.get_term_link($term->term_id).'" target="_blank">' . $term->name . '</a></li>';
 							}
 
+							$terms = get_terms('estilo', $args);
+							foreach ( $terms as $term ) {
+								echo '<li><a href="'.get_term_link($term->term_id).'" target="_blank">' . $term->name . '</a></li>';
+							}
+							$terms = get_terms('regiao', $args);
+							foreach ( $terms as $term ) {
+								echo '<li><a href="'.get_term_link($term->term_id).'" target="_blank">' . $term->name . '</a></li>';
+							}
 						?>
 					</ul>
 				</div>
@@ -38,7 +44,7 @@
     <main role="main" class="container">
 
         <div class="row">
-        	<div class="col-md-12 eventos-wrap">
+        	<div class="col-md-12 eventos-wrap d-md-flex">
         	
         		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
         		
@@ -53,7 +59,7 @@
 								<?php echo mb_strimwidth(get_the_title(), 0, 40, '...'); ?>
 							</p>
 							
-							<div class="data-local-info">
+							<div class="data-local-info d-md-flex">
 								<div class="data-evento">
 									<?php
 										// get raw date
@@ -87,7 +93,7 @@
 
 							<div class="cta-evento">
 
-								<a href="#>" target="_blank" class="btn btn-primary"><i class="fas fa-ticket-alt"></i> Comprar ingresso</a>
+								<a href="#" target="_blank" class="btn btn-primary"><i class="fas fa-ticket-alt"></i> Comprar ingresso</a>
 
 								<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary"><i class="fab fa-facebook-square"></i> Mais Informações</a>
 

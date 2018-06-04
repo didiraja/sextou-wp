@@ -126,7 +126,10 @@ function taxonomia_local() {
     $args = array(
         'labels' => $labels,
         'public' => true,
-        'hierarchical' => true
+        'hierarchical' => true,
+        'show_ui'                    => true,
+        'show_in_quick_edit'         => false,
+        'meta_box_cb'                => false
     );
 	
     register_taxonomy('local', 'post', $args);
