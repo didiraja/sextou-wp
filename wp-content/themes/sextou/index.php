@@ -13,7 +13,7 @@
 	<section id="menu">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-10">
+				<div class="col-md-8 mx-auto">
 					<ul class="lista-categoria text-center">
 						<?php
 

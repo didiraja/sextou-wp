@@ -1,17 +1,28 @@
+body {
+    padding: 3em 0;
+}
+
 .eventos-wrap {
 	display: flex;
 	justify-content: center;
 }
 
 .lista-categoria {
+    padding-left: 0;
     margin: 3em 0;
 }
 
 .lista-categoria li {
     display: inline-block;
-    margin: 0 1em;
+    margin: 0 .2em;
     color: yellow;
     margin-bottom: 1em;
+}
+
+.lista-categoria li ~ li:before{
+    content: "/";
+    color: white;
+    margin-right: .3em;
 }
 
 .lista-categoria a {
@@ -92,6 +103,10 @@
 
 .cta-evento {
     margin: 1.5em 0 .5em;
+}
+
+.card-footer {
+    padding: .5em;
 }
 
 .card-footer .badge {
