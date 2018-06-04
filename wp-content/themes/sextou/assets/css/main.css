@@ -3,6 +3,32 @@
 	justify-content: center;
 }
 
+.lista-categoria {
+    margin: 3em 0;
+}
+
+.lista-categoria li {
+    display: inline-block;
+    margin: 0 1em;
+    color: yellow;
+    margin-bottom: 1em;
+}
+
+.lista-categoria a {
+    color: yellow;
+    font-weight: bold;
+
+    padding-bottom: 2px;
+    border-bottom: 1px solid yellow;
+}
+
+.lista-categoria a:hover {
+    text-decoration: none;
+
+    padding-bottom: 2px;
+    border-bottom: 0;
+}
+
 .card-evento {
 	width: 33%;
     margin: 0 .2em;

@@ -13,9 +13,21 @@
 	<section id="menu">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-12">
-					<ul class="list-inline text-center">
-						<li><a href="#" style="color:yellow;">Aqui vão os links</a></li>
+				<div class="col-md-10">
+					<ul class="lista-categoria text-center">
+						<?php
+
+							$args = array(
+								'orderby' => 'id',
+								'hide_empty' => false,
+								'exclude' => 1
+							);
+							$terms = get_terms($args);
+							foreach ( $terms as $term ) {
+								echo '<li><a href="'.get_term_link($term->term_id).'" target="_blank">' . $term->name . '</a></li>';
+							}
+
+						?>
 					</ul>
 				</div>
 			</div>
@@ -106,7 +118,7 @@
 							
 						 </div>
 						
-					</div>
+						</div>
         		
         		<?php endwhile; ?>
 				<?php endif; ?>
