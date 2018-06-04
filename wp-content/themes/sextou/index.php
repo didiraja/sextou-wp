@@ -15,7 +15,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<ul class="list-inline text-center">
-						
+						<li><a href="#" style="color:yellow;">Aqui vão os links</a></li>
 					</ul>
 				</div>
 			</div>
@@ -47,14 +47,14 @@
 										// get raw date
 										$date = get_field('data_evento');
 										// make date object
-										$date = new DateTime($date);
+										//$date = new DateTime($date);
 									?>
 
 									<p class="mes-evento">
-										<?= $date->format('M'); ?>
+										<?= date_i18n('M', strtotime($date)); ?>
 									</p>
 									<p class="dia-evento">
-									<?= $date->format('d'); ?>
+									<?= date_i18n('d', strtotime($date)); ?>
 									</p>
 
 										
@@ -70,6 +70,7 @@
 							</div>
 							
 							<p class="card-text"><?= get_the_excerpt(); ?></p>
+							<a href="#>" target="_blank" class="btn btn-outline-primary">Acessar página do evento</a>
 							<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-danger">Acessar página do evento</a>
 						</div>
 						
