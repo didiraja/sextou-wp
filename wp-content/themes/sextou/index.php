@@ -1,5 +1,28 @@
 <?php get_header(); ?>
+
+	<section id="logo">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<img src="<?= get_template_directory_uri(); ?>/assets/img/sextou-logo.png" alt="Sextou!" class="img-fluid d-block mx-auto">
+				</div>
+			</div>
+		</div>
+	</section>
    
+	<section id="menu">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<ul class="list-inline text-center">
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
     <main role="main" class="container">
 
         <div class="row">
