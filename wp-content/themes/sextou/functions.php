@@ -26,6 +26,35 @@ function revcon_change_post_object() {
 
 add_action( 'init', 'revcon_change_post_object' );
 
+// cria post type Slider
+function post_type_slider() {
+    $nomeSingular = 'Slider';
+    $nomePlural = 'Slider';
+    $labels = array(
+        'name' => $nomePlural,
+        'singular_name' => $nomeSingular,
+        'add_new_item' => 'Adicionar novo ' . $nomeSingular,
+        'edit_item' => 'Editar ' . $nomeSingular,
+        'not_found' => 'Nenhum ' . $nomeSingular . ' encontrado'
+    );
+    
+    $supports = array(
+        'title',
+        'editor',
+        'thumbnail'
+    );
+    $args = array (
+        'labels' => $labels,
+        'public' => true,
+        'description' => 'Sliders da Home',
+        'menu_icon' => 'dashicons-images-alt',
+        'supports' => $supports,
+        'menu_position' => 5
+    );
+    register_post_type('slider', $args);
+};
+add_action('init', 'post_type_slider');
+
 // remove categorias e tags
 function remove_tax() {
     register_taxonomy('category', array());
