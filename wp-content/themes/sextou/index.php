@@ -9,6 +9,20 @@
 			</div>
 		</div>
 	</section>
+
+	<section id="slider">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 p-md-0 slick-wrap">
+					<div class="main-slider">
+						<img src="http://via.placeholder.com/2000x500/1B9CFC/000000" class="img-fluid">
+						<img src="http://via.placeholder.com/2000x500/EAB543/000000" class="img-fluid">
+						<img src="http://via.placeholder.com/2000x500/3B3B98/000000" class="img-fluid">
+						<img src="http://via.placeholder.com/2000x500/B33771/000000" class="img-fluid">
+				</div>
+			</div>
+		</div>
+	</section>
    
 	<section id="menu">
 		<div class="container">
@@ -40,8 +54,7 @@
 		</div>
 	</section>
 
-
-    <main role="main" class="container">
+    <main role="main" class="container section">
 
         <div class="row">
         	<div class="col-md-12 eventos-wrap d-md-flex">
