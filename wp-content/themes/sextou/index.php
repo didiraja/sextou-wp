@@ -15,16 +15,30 @@
 			<div class="row">
 				<div class="col-md-12 p-md-0">
 					<div class="main-slider">
+
+						<?php
+					
+						$args = array('post_type' => 'slider');
+							
+						$loop = new WP_Query($args);
+					
+							if  ($loop->have_posts()) { ?>
+
+						<?php
+								while( $loop->have_posts() ) {
+									$loop->the_post();
+						?>
+							<a href="<?php the_field('link_slider'); ?>" target="_blank">
+								<img src="<?php the_post_thumbnail_url(); ?>" class="img-fluid">
+							</a>
+							
+						<?php
+								}
+							}
+						?>
+
 						<a href="#" target="_blank">
-							<img src="http://via.placeholder.com/2000x500/1B9CFC/000000" class="img-fluid">
-						<a href="#" target="_blank">
-							<img src="http://via.placeholder.com/2000x500/EAB543/000000" class="img-fluid">
-						</a>
-						<a href="#" target="_blank">
-							<img src="http://via.placeholder.com/2000x500/3B3B98/000000" class="img-fluid">
-						</a>
-						<a href="#" target="_blank">
-							<img src="http://via.placeholder.com/2000x500/B33771/000000" class="img-fluid">
+							<img src="http://via.placeholder.com/2000x500/1B9CFC/000000?text=Ultimo+Slide" class="img-fluid">
 						</a>
 				</div>
 			</div>
