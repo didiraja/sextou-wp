@@ -13,7 +13,7 @@
 	<section id="slider">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-12 p-md-0">
+				<div class="col-md-12 p-0">
 					<div class="main-slider">
 
 						<?php
@@ -36,10 +36,6 @@
 								}
 							}
 						?>
-
-						<a href="#" target="_blank">
-							<img src="http://via.placeholder.com/2000x500/1B9CFC/000000?text=Ultimo+Slide" class="img-fluid">
-						</a>
 				</div>
 			</div>
 		</div>
@@ -93,7 +89,7 @@
 								<?php echo mb_strimwidth(get_the_title(), 0, 40, '...'); ?>
 							</p>
 							
-							<div class="data-local-info d-md-flex">
+							<div class="data-local-info d-flex">
 								<div class="data-evento">
 									<?php
 										// get raw date
@@ -127,7 +123,7 @@
 
 							<div class="cta-evento">
 
-								<a href="#" target="_blank" class="btn btn-primary"><i class="fas fa-ticket-alt"></i> Comprar ingresso</a>
+								<a href="<?php the_field('ingressos_online') ?>" target="_blank" class="btn btn-primary"><i class="fas fa-ticket-alt"></i> Comprar ingresso</a>
 
 								<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary"><i class="fab fa-facebook-square"></i> Mais Informações</a>
 
