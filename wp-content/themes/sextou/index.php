@@ -86,7 +86,7 @@
 						
 						<div class="card-body">
 							<p class="h1 card-title">
-								<?php echo mb_strimwidth(get_the_title(), 0, 40, '...'); ?>
+								<?php echo mb_strimwidth(get_the_title(), 0, 32, '...'); ?>
 							</p>
 							
 							<div class="data-local-info d-flex">
