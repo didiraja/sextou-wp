@@ -1,14 +1,36 @@
+@import '_rem'
+
+$cor-secundaria: #ffb400
+
 body
   padding: 1em 0
   background-image: url('../img/bg.jpg')
 
 h1, .h1
-    font-size: 2.1rem
-    
+    font-size: 2.1rem    
 
 section, .section
   margin-top: 1em
   margin-bottom: 1em
+
+.btn-secondary
+  color: white
+
+  background: $cor-secundaria
+  border-color: $cor-secundaria
+
+  &:hover
+    background: darken($cor-secundaria, 20%)
+    border-color: darken($cor-secundaria, 20%)
+
+.btn-light
+  background: white
+  border-color: white
+
+  &:hover
+    background: darken(white, 20%)
+    border-color: darken(white, 20%)
+
 
 .slick-dotted.slick-slider
   margin-bottom: 0
@@ -39,20 +61,32 @@ section, .section
     display: inline-block
     margin: 0 0 1em
     color: yellow
-    
-    ~ li:before
-      content: "/"
-      color: white
-      margin-right: .3em
   a
-    color: yellow
+    font-size: rem(16px)
     font-weight: bold
-    padding-bottom: 2px
-    border-bottom: 1px solid yellow
-    &:hover
-      text-decoration: none
-      padding-bottom: 2px
-      border-bottom: 0
+    text-transform: uppercase
+
+.abre-busca
+  svg
+    width: rem(20px)
+    vertical-align: sub
+
+.searchform
+  background: $cor-secundaria
+  border-radius: .25rem
+
+  padding: .5rem 0;
+  margin-top: 1rem;
+
+  display: flex
+  justify-content: center
+
+  .input-busca
+    width: 80%
+
+  #searchsubmit
+    font-weight: bold
+    margin-left: .5rem
 
 .eventos-wrap
   flex-wrap: wrap

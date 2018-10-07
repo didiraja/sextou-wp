@@ -9,6 +9,21 @@ section, .section {
   margin-top: 1em;
   margin-bottom: 1em; }
 
+.btn-secondary {
+  color: white;
+  background: #ffb400;
+  border-color: #ffb400; }
+  .btn-secondary:hover {
+    background: #996c00;
+    border-color: #996c00; }
+
+.btn-light {
+  background: white;
+  border-color: white; }
+  .btn-light:hover {
+    background: #cccccc;
+    border-color: #cccccc; }
+
 .slick-dotted.slick-slider {
   margin-bottom: 0; }
 
@@ -38,19 +53,27 @@ section, .section {
     display: inline-block;
     margin: 0 0 1em;
     color: yellow; }
-    .lista-categoria li ~ li:before {
-      content: "/";
-      color: white;
-      margin-right: .3em; }
   .lista-categoria a {
-    color: yellow;
+    font-size: 1rem;
     font-weight: bold;
-    padding-bottom: 2px;
-    border-bottom: 1px solid yellow; }
-    .lista-categoria a:hover {
-      text-decoration: none;
-      padding-bottom: 2px;
-      border-bottom: 0; }
+    text-transform: uppercase; }
+
+.abre-busca svg {
+  width: 1.25rem;
+  vertical-align: sub; }
+
+.searchform {
+  background: #ffb400;
+  border-radius: .25rem;
+  padding: .5rem 0;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center; }
+  .searchform .input-busca {
+    width: 80%; }
+  .searchform #searchsubmit {
+    font-weight: bold;
+    margin-left: .5rem; }
 
 .eventos-wrap {
   flex-wrap: wrap;
