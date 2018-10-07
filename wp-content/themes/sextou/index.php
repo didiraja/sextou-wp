@@ -95,17 +95,62 @@
 		<div class="col-md-12 eventos-wrap d-md-flex">
 		
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+				<div class="card-evento">
+
+					<div class="card-header">
+
+						<div class="evento-data-local">
+							<p class="h1 evento-title">
+								<?php echo mb_strimwidth(get_the_title(), 0, 20, '...'); ?>
+							</p>
+							
+							<p class="texto-comum">
+								<span class="card-data">
+									<?php
+										// get raw date
+										$date = get_field('data_evento');
+										// make date object
+										//$date = new DateTime($date);
+									?>
+								<?= date_i18n('d F', strtotime($date)); ?>
+								</span> • 
+								<span class="card-local">
+								<?php
+									$local = get_field('local_evento');
+
+									echo $local->name;
+								?>
+								</span>
+							</p>
+						</div>
+
+						<img class="evento-thumb" src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+
+					</div>
+
+					<div class="cta-evento">
+
+						<a href="<?php the_field('ingressos_online') ?>" target="_blank" class="btn btn-primary">
+							Comprar ingresso
+						</a>
+
+						<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary">
+							Mais Informações
+						</a>
+
+					</div>
+
+				</div>
 			
-				<div class="card card-evento">
+				<!-- <div class="card card-evento">
 					
 					<div class="evento-thumb">
 						<img class="card-img-top" src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
 					</div>
 					
 					<div class="card-body">
-						<p class="h1 card-title">
-							<?php echo mb_strimwidth(get_the_title(), 0, 32, '...'); ?>
-						</p>
+						
 						
 						<div class="data-local-info d-flex">
 							<div class="data-evento">
@@ -172,7 +217,7 @@
 						
 					</div>
 					
-				</div>
+				</div> -->
 			
 			<?php endwhile; ?>
 
