@@ -1,0 +1,142 @@
+body
+  padding: 1em 0
+  background-image: url('../img/bg.jpg')
+
+h1, .h1
+    font-size: 2.1rem
+    
+
+section, .section
+  margin-top: 1em
+  margin-bottom: 1em
+
+.slick-dotted.slick-slider
+  margin-bottom: 0
+
+.slick-wrap
+  overflow-x: hidden
+
+.slick-prev
+  left: 10px
+
+.slick-next
+  right: 10px
+
+.slick-prev, .slick-next
+  z-index: 9999
+
+.slick-dots
+  bottom: 10px
+  z-index: 999
+
+#menu, #slider
+  margin: 3em 0
+
+.lista-categoria
+  padding-left: 0
+  margin: 0
+  li
+    display: inline-block
+    margin: 0 0 1em
+    color: yellow
+    
+    ~ li:before
+      content: "/"
+      color: white
+      margin-right: .3em
+  a
+    color: yellow
+    font-weight: bold
+    padding-bottom: 2px
+    border-bottom: 1px solid yellow
+    &:hover
+      text-decoration: none
+      padding-bottom: 2px
+      border-bottom: 0
+
+.eventos-wrap
+  flex-wrap: wrap
+  justify-content: flex-start
+
+.card-evento
+  width: 100%
+  margin: 0 1rem 1rem 0
+  border: 0
+
+.evento-thumb
+  margin: 0
+  width: 100%
+  height: 11.2rem
+  overflow: hidden
+  img
+    max-width: 100%
+    height: auto
+
+.card-body
+  padding: .5em
+
+.card-title
+  margin: 0
+  min-height: 5rem
+
+.data-local-info
+  padding: 1em 0 0
+  align-items: center
+
+.data-evento
+  display: inline-block
+  text-align: center
+  border: 1px solid #939ca5
+  padding: 0em 0.3em
+  border-radius: 5px
+  p
+    margin: 0
+
+.mes-evento
+  display: block
+  text-transform: uppercase
+  color: red
+
+.local-evento
+  margin-left: .5em
+
+.resumo-evento
+  margin: 1em 0
+
+.cta-evento
+  margin: 1.5em 0 .5em
+  
+  justify-content: space-around
+  > .btn
+    padding: .375rem
+    white-space: initial
+    margin-bottom: 0.4rem
+    display: block
+
+.card-footer
+  padding: .5em
+  .badge
+    margin: 0 0.1em
+
+@media screen and (min-width: 728px) 
+
+    h1,.h1
+        font-size: 2.5rem
+
+    .lista-categoria
+        li
+            margin: 0 .2em
+
+    .card-evento
+        width: 47%
+
+    .cta-evento
+        display: flex   
+    > .btn
+        &:first-child
+        margin-bottom: inherit
+
+@media screen and (min-width: 1024px)
+    
+    .card-evento
+        width: 31%
