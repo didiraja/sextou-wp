@@ -14,15 +14,16 @@ section, .section {
   background: #ffb400;
   border-color: #ffb400; }
   .btn-secondary:hover {
-    background: #996c00;
-    border-color: #996c00; }
+    background-color: rgba(255, 180, 0, 0.2);
+    color: #ffb400;
+    border-color: #ffb400; }
 
 .btn-light {
   background: white;
   border-color: white; }
   .btn-light:hover {
-    background: #cccccc;
-    border-color: #cccccc; }
+    background: rgba(255, 255, 255, 0.5);
+    border-color: white; }
 
 .slick-dotted.slick-slider {
   margin-bottom: 0; }
