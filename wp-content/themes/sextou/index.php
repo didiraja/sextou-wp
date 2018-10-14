@@ -102,7 +102,7 @@
 
 						<div class="evento-data-local">
 							<p class="h1 evento-title">
-								<?php echo mb_strimwidth(get_the_title(), 0, 20, '...'); ?>
+								<?php echo mb_strimwidth(get_the_title(), 0, 18, '...'); ?>
 							</p>
 							
 							<p class="texto-comum">
@@ -138,6 +138,34 @@
 						<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary">
 							Mais Informações
 						</a>
+
+					</div>
+
+					<div class="card-footer">
+
+					<ul class="link-tag">	
+
+					<?php
+						// Busca a taxonomia associada ao post
+						$term_list = wp_get_post_terms($post->ID, 'cidade', array("fields" => "all"));
+						
+						// Escreve as taxonomias com link usando função de fora do loop 
+						foreach($term_list as $term_single) {
+							echo '<li><a href="' .get_term_link($term_single->term_id). '" class="link-tag-item">' .$term_single->name. '</a></li>';
+						}
+
+						$term_list = wp_get_post_terms($post->ID, 'estilo', array("fields" => "all"));
+						foreach($term_list as $term_single) {
+							echo '<li><a href="' .get_term_link($term_single->term_id). '" class="link-tag-item">' .$term_single->name. '</a></li>';
+						}	
+
+						$term_list = wp_get_post_terms($post->ID, 'regiao', array("fields" => "all"));
+						foreach($term_list as $term_single) {
+							echo '<li><a href="' .get_term_link($term_single->term_id). '" class="link-tag-item">' .$term_single->name. '</a></li>';
+						}
+					?>
+
+					</ul>
 
 					</div>
 
@@ -191,30 +219,6 @@
 							<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary"><i class="fab fa-facebook-square"></i> Mais Informações</a>
 
 						</div>
-					</div>
-					
-					<div class="card-footer">
-
-						<?php
-							// Busca a taxonomia associada ao post
-							$term_list = wp_get_post_terms($post->ID, 'cidade', array("fields" => "all"));
-							
-							// Escreve as taxonomias com link usando função de fora do loop 
-							foreach($term_list as $term_single) {
-								echo '<a href="' .get_term_link($term_single->term_id). '" class="badge badge-primary">' .$term_single->name. '</a>';
-							}
-						
-							$term_list = wp_get_post_terms($post->ID, 'estilo', array("fields" => "all"));
-							foreach($term_list as $term_single) {
-								echo '<a href="' .get_term_link($term_single->term_id). '" class="badge badge-success">' .$term_single->name. '</a>';
-							}	
-						
-							$term_list = wp_get_post_terms($post->ID, 'regiao', array("fields" => "all"));
-							foreach($term_list as $term_single) {
-								echo '<a href="' .get_term_link($term_single->term_id). '" class="badge badge-danger">' .$term_single->name. '</a>';
-							}
-						?>
-						
 					</div>
 					
 				</div> -->

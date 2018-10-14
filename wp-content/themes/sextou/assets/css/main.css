@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   padding: 1em 0;
   background-image: url("../img/bg.jpg");
@@ -83,7 +84,7 @@ section, .section {
 .searchform {
   background: #ffb400;
   border-radius: .25rem;
-  padding: .5rem 0;
+  padding: .5rem;
   margin-top: 1rem;
   display: flex;
   justify-content: center; }
@@ -99,7 +100,8 @@ section, .section {
 
 .card-evento {
   background: white;
-  border-radius: 0.5rem; }
+  border-radius: 0.5rem;
+  margin-bottom: 1rem; }
   .card-evento .card-header {
     padding: 0;
     overflow: hidden;
@@ -108,14 +110,18 @@ section, .section {
   .card-evento .evento-data-local {
     position: absolute;
     bottom: 0;
-    padding: 0 .3rem; }
+    padding: 0.3rem 0.5rem; }
     .card-evento .evento-data-local .h1, .card-evento .evento-data-local p {
       margin-bottom: 0; }
   .card-evento .evento-title {
     color: white;
-    font-size: 1.9375rem; }
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.9375rem;
+    text-shadow: 1px 1px 0px black; }
   .card-evento .texto-comum {
-    color: white; }
+    color: white;
+    font-size: 1.0625rem; }
   .card-evento .evento-thumb {
     width: 100%;
     border: 1px solid white; }
@@ -127,6 +133,23 @@ section, .section {
       white-space: initial;
       margin-bottom: 0.4rem;
       display: block; }
+  .card-evento .card-footer {
+    background: transparent;
+    border: 0;
+    padding: 0 .5rem .5rem; }
+    .card-evento .card-footer .link-tag {
+      list-style-type: none;
+      padding-inline-start: 0;
+      margin-bottom: 0; }
+      .card-evento .card-footer .link-tag li {
+        display: inline-block; }
+      .card-evento .card-footer .link-tag li ~ li:before {
+        content: "•";
+        margin: 0 .2rem; }
+    .card-evento .card-footer .link-tag-item {
+      color: black;
+      text-decoration: underline;
+      font-weight: 600; }
 
 @media screen and (min-width: 728px) {
   h1, .h1 {
