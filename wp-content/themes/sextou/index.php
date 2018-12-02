@@ -124,7 +124,7 @@
 								</span>
 							</p>
 						</div>
-
+						
 						<img class="evento-thumb" src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
 
 					</div>
@@ -171,64 +171,12 @@
 
 				</div>
 			
-				<!-- <div class="card card-evento">
-					
-					<div class="evento-thumb">
-						<img class="card-img-top" src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
-					</div>
-					
-					<div class="card-body">
-						
-						
-						<div class="data-local-info d-flex">
-							<div class="data-evento">
-								<?php
-									// get raw date
-									$date = get_field('data_evento');
-									// make date object
-									//$date = new DateTime($date);
-								?>
-
-								<p class="mes-evento">
-									<?= date_i18n('M', strtotime($date)); ?>
-								</p>
-								<p class="dia-evento">
-								<?= date_i18n('d', strtotime($date)); ?>
-								</p>
-
-									
-							</div>	
-
-							<div class="h5 local-evento">
-								<?php
-									$local = get_field('local_evento');
-
-									echo $local->name;
-								?>
-							</div>
-						</div>
-						
-						<p class="card-text resumo-evento">
-							<?= mb_strimwidth( get_the_excerpt(), 0, 98, '...'); ?>
-						</p>
-
-						<div class="cta-evento">
-
-							<a href="<?php the_field('ingressos_online') ?>" target="_blank" class="btn btn-primary"><i class="fas fa-ticket-alt"></i> Comprar ingresso</a>
-
-							<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary"><i class="fab fa-facebook-square"></i> Mais Informações</a>
-
-						</div>
-					</div>
-					
-				</div> -->
-			
 			<?php endwhile; ?>
 
-			<div style="border:1px dotted red">
+			<div class="btn-nav--wrap">
 
-				<div class="nav-previous alignleft"><?php next_posts_link( 'Older posts' ); ?></div>
-				<div class="nav-next alignright"><?php previous_posts_link( 'Newer posts' ); ?></div>
+				<div class="nav-previous alignleft"><?php next_posts_link('<< Eventos antigos'); ?></div>
+				<div class="nav-next alignright"><?php previous_posts_link('Novos Eventos >>'); ?></div>
 
 			</div>
 

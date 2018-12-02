@@ -118,6 +118,7 @@ section, .section
   background: white
   border-radius: rem(8px)
   margin-bottom: 1rem
+  border: 2px solid white // reforçar a borda nos cantos arredondados
 
   .card-header
     padding: 0
@@ -149,6 +150,7 @@ section, .section
 
   .evento-thumb
     width: 100%
+    height: (6 / 9) * 100%
     border: 1px solid white  
 
   .cta-evento
@@ -182,77 +184,63 @@ section, .section
       text-decoration: underline
       font-weight: 600
 
-// .card-evento
-//   width: 100%
-//   margin: 0 1rem 1rem 0
-//   border: 0
+.btn-nav--wrap
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 
-// .evento-thumb
-//   margin: 0
-//   width: 100%
-//   height: 11.2rem
-//   overflow: hidden
-//   img
-//     max-width: 100%
-//     height: auto
-
-// .card-body
-//   padding: .5em
-
-// .card-title
-//   margin: 0
-//   min-height: 5rem
-
-// .data-local-info
-//   padding: 1em 0 0
-//   align-items: center
-
-// .data-evento
-//   display: inline-block
-//   text-align: center
-//   border: 1px solid #939ca5
-//   padding: 0em 0.3em
-//   border-radius: 5px
-//   p
-//     margin: 0
-
-// .mes-evento
-//   display: block
-//   text-transform: uppercase
-//   color: red
-
-// .local-evento
-//   margin-left: .5em
-
-// .resumo-evento
-//   margin: 1em 0
-
-
-
-// .card-footer
-//   padding: .5em
-//   .badge
-//     margin: 0 0.1em
+  .btn-nav
+   font-weight: 700
 
 @media screen and (min-width: 728px) 
 
-    h1,.h1
-        font-size: 2.5rem
+  h1,.h1
+    font-size: 2.5rem
 
-    .lista-categoria
-        li
-            margin: 0 .2em
+  .lista-categoria
+    li
+      margin: 0 .2em
+  
+  .eventos-wrap
+    padding: 0
 
-    // .card-evento
-    //     width: 47%
+  .card-evento
+    width: calc(50% - 8px)
 
-    // .cta-evento
-    //     display: flex   
-    // > .btn
-    //     &:first-child
-    //     margin-bottom: inherit
+    &:nth-child(even)
+      margin-left: 0.5rem;
+    
+    &:nth-child(odd)
+      margin-right: 0.5rem;
+
 
 @media screen and (min-width: 1024px)
+
+  .card-evento
+    width: calc(33.3% - 5px)
+
+    &:nth-child(even)
+      margin-left: 0;
     
-    // .card-evento
-    //     width: 31%
+    &:nth-child(odd)
+      margin-right: 0;
+    
+    &:nth-child(3n+2)
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    
+@media screen and (min-width: 1280px)
+
+  .card-evento
+    width: calc(25% - 6px)
+    
+    &:nth-child(3n+2)
+      margin-left: 0
+      margin-right: 0
+    
+    &:nth-child(4n+2)
+      margin-left: 0.5rem;
+      
+    &:nth-child(4n+3)
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
