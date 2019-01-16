@@ -22,7 +22,7 @@ section, .section
   border-color: $cor-primaria
 
   &:hover
-    background-color: rgba($cor-primaria,.2)
+    background-color: rgba($cor-primaria,.3)
     color: $cor-primaria
     border-color: $cor-primaria
 
@@ -31,8 +31,13 @@ section, .section
   border-color: $cor-primaria
 
   &:hover
+    background-color: #ccc
     color: $cor-primaria
     border-color: $cor-primaria
+
+  &:not(:disabled):not(.disabled):active
+    background-color: darken(#ccc,10%)
+    color: $cor-primaria
 
 .btn-secondary
   color: white
@@ -166,7 +171,7 @@ section, .section
     border: 1px solid white  
 
   .cta-evento
-    padding: .5em .5em .1rem
+    padding: .5em .1em .1rem
     justify-content: space-around
     > .btn
       padding: .375rem
@@ -183,9 +188,11 @@ section, .section
       list-style-type: none
       padding-inline-start: 0
       margin-bottom: 0
+      overflow-x: scroll
 
       li
-        display: inline-block
+        display: inline
+        white-space: pre
 
       li ~ li:before
         content: "•"

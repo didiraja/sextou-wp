@@ -43,10 +43,10 @@
 	</div>
 </section>
 
-<section id="menu">
+<section id="menu d-md-none">
 	<div class="container">
 
-    <div class="row d-md-none">
+    <div class="row">
 			<div class="col-md-12 menu-view">
 				<button type="button" class="btn btn-secondary menu-view-btn">Menu</button>
 			</div>

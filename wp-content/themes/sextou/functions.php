@@ -7,7 +7,7 @@ add_theme_support('post-thumbnails');
 function revcon_change_post_object() {
 	$get_post_type = get_post_type_object('post');
 	$labels = $get_post_type->labels;
-	$labels->name = 'Evento';
+	$labels->name = 'Eventos';
 	$labels->singular_name = 'Evento';
 	$labels->add_new = 'Novo Evento';
 	$labels->add_new_item = 'Novo Evento';
@@ -18,7 +18,7 @@ function revcon_change_post_object() {
 	$labels->not_found = 'Nenhum Evento encontrado';
 	$labels->not_found_in_trash = 'Nenhum Evento encontrado na Lixeira';
 	$labels->all_items = 'Todos os Eventos';
-	$labels->menu_name = 'Evento';
+	$labels->menu_name = 'Eventos';
 	$labels->name_admin_bar = 'Evento';
 	//Change menu icon
 	$get_post_type->menu_icon = 'dashicons-calendar-alt';

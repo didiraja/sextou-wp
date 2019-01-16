@@ -16,7 +16,7 @@ section, .section {
   background: #00aeef;
   border-color: #00aeef; }
   .btn-primary:hover {
-    background-color: rgba(0, 174, 239, 0.2);
+    background-color: rgba(0, 174, 239, 0.3);
     color: #00aeef;
     border-color: #00aeef; }
 
@@ -24,8 +24,12 @@ section, .section {
   color: #00aeef;
   border-color: #00aeef; }
   .btn-outline-primary:hover {
+    background-color: #ccc;
     color: #00aeef;
     border-color: #00aeef; }
+  .btn-outline-primary:not(:disabled):not(.disabled):active {
+    background-color: #b3b3b3;
+    color: #00aeef; }
 
 .btn-secondary {
   color: white;
@@ -138,7 +142,7 @@ section, .section {
     height: 66.66667%;
     border: 1px solid white; }
   .card-evento .cta-evento {
-    padding: .5em .5em .1rem;
+    padding: .5em .1em .1rem;
     justify-content: space-around; }
     .card-evento .cta-evento > .btn {
       padding: .375rem;
@@ -152,9 +156,11 @@ section, .section {
     .card-evento .card-footer .link-tag {
       list-style-type: none;
       padding-inline-start: 0;
-      margin-bottom: 0; }
+      margin-bottom: 0;
+      overflow-x: scroll; }
       .card-evento .card-footer .link-tag li {
-        display: inline-block; }
+        display: inline;
+        white-space: pre; }
       .card-evento .card-footer .link-tag li ~ li:before {
         content: "•";
         margin: 0 .2rem; }
