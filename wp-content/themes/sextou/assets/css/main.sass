@@ -76,17 +76,30 @@ section, .section
 #menu, #slider
   margin: 3em 0
 
+.menu-view
+  margin-bottom: rem(10px)
+
+  &-btn
+    width: 100%
+
 .lista-categoria
   padding-left: 0
   margin: 0
+  display: none
   li
     display: inline-block
     margin: 0 0 1em
     color: yellow
+
+    & ~ li
+      margin-left: rem(5px)
   a
     font-size: rem(16px)
     font-weight: bold
     text-transform: uppercase
+
+.search-row
+  display: none
 
 .abre-busca
   svg
@@ -98,7 +111,6 @@ section, .section
   border-radius: .25rem
 
   padding: .5rem;
-  margin-top: 1rem;
 
   display: flex
   justify-content: center
