@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-  padding: 1em 0;
+  padding-top: 1em;
   background-image: url("../img/bg.jpg");
   font-family: 'Open Sans', sans-serif; }
 
@@ -175,6 +175,9 @@ section, .section {
   justify-content: space-between; }
   .btn-nav--wrap .btn-nav {
     font-weight: 700; }
+
+footer p {
+  color: white; }
 
 @media screen and (min-width: 728px) {
   h1, .h1 {

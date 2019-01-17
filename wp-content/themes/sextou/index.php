@@ -109,25 +109,21 @@
 
 						<div class="evento-data-local">
 							<p class="h1 evento-title">
-								<?php echo mb_strimwidth(get_the_title(), 0, 18, '...'); ?>
+								<?php echo mb_strimwidth(get_the_title(), 0, 17, '...'); ?>
 							</p>
 							
 							<p class="texto-comum">
 								<span class="card-data">
 									<?php
-										// get raw date
 										$date = get_field('data_evento');
-										// make date object
-										//$date = new DateTime($date);
+										echo date_i18n('d F', strtotime($date));
 									?>
-								<?= date_i18n('d F', strtotime($date)); ?>
 								</span> • 
 								<span class="card-local">
-								<?php
-									$local = get_field('local_evento');
-
-									echo $local->name;
-								?>
+									<?php
+										$local = get_field('local_evento');
+										echo $local->name;
+									?>
 								</span>
 							</p>
 						</div>
@@ -161,15 +157,16 @@
 							echo '<li><a href="' .get_term_link($term_single->term_id). '" class="link-tag-item">' .$term_single->name. '</a></li>';
 						}
 
+						$term_list = wp_get_post_terms($post->ID, 'regiao', array("fields" => "all"));
+						foreach($term_list as $term_single) {
+							echo '<li><a href="' .get_term_link($term_single->term_id). '" class="link-tag-item">' .$term_single->name. '</a></li>';
+						}
+
 						$term_list = wp_get_post_terms($post->ID, 'estilo', array("fields" => "all"));
 						foreach($term_list as $term_single) {
 							echo '<li><a href="' .get_term_link($term_single->term_id). '" class="link-tag-item">' .$term_single->name. '</a></li>';
 						}	
 
-						$term_list = wp_get_post_terms($post->ID, 'regiao', array("fields" => "all"));
-						foreach($term_list as $term_single) {
-							echo '<li><a href="' .get_term_link($term_single->term_id). '" class="link-tag-item">' .$term_single->name. '</a></li>';
-						}
 					?>
 
 					</ul>
