@@ -48,7 +48,9 @@
 
     <div class="row">
 			<div class="col-md-12 menu-view">
-				<button type="button" class="btn btn-secondary menu-view-btn">Menu</button>
+				<button type="button" class="btn btn-secondary menu-view-btn">
+				<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z"/></svg> Menu
+				</button>				
 			</div>
 		</div>
 
@@ -109,7 +111,7 @@
 
 						<div class="evento-data-local">
 							<p class="h1 evento-title">
-								<?php echo mb_strimwidth(get_the_title(), 0, 17, '...'); ?>
+								<?php echo mb_strimwidth(get_the_title(), 0, 20, '...'); ?>
 							</p>
 							
 							<p class="texto-comum">
@@ -179,8 +181,12 @@
 
 			<div class="btn-nav--wrap">
 
-				<div class="nav-previous alignleft"><?php next_posts_link('<< Eventos antigos'); ?></div>
-				<div class="nav-next alignright"><?php previous_posts_link('Novos Eventos >>'); ?></div>
+				<div class="nav-previous alignleft">
+					<?php next_posts_link('<svg xmlns="http://www.w3.org/2000/svg" viewBox="320 -369.4 1542 1538.9"><path d="M1107 445c-5.3-6-9.7-12.3-13-19v710c0 17.3-4.3 28-13 32s-19.3-.3-32-13L339 445c-12.7-12.7-19-27.7-19-45s6.3-32.3 19-45l710-710c12.7-12.7 23.3-17 32-13s13 14.7 13 32v710a64 64 0 0 1 13-19l710-710c12.7-12.7 23.3-17 32-13s13 14.7 13 32v1472c0 17.3-4.3 28-13 32s-19.3-.3-32-13l-710-710z"/></svg> Eventos antigos'); ?>
+				</div>
+				<div class="nav-next alignright">
+					<?php previous_posts_link('Novos Eventos <svg xmlns="http://www.w3.org/2000/svg" viewBox="320 -369.4 1542 1538.9"><path d="M365 1155c-12.7 12.7-23.3 17-32 13s-13-14.7-13-32V-336c0-17.3 4.3-28 13-32s19.3.3 32 13l710 710a64 64 0 0 1 13 19v-710c0-17.3 4.3-28 13-32s19.3.3 32 13l710 710c12.7 12.7 19 27.7 19 45s-6.3 32.3-19 45l-710 710c-12.7 12.7-23.3 17-32 13s-13-14.7-13-32V426c-3.3 6.7-7.7 13-13 19l-710 710z"/></svg>'); ?>
+				</div>
 
 			</div>
 
