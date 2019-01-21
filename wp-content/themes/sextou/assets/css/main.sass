@@ -82,7 +82,7 @@ section, .section
   margin: 3em 0
 
 .menu-view
-  margin-bottom: rem(10px)
+  padding: 0
 
   &-btn
     width: 100%
@@ -96,6 +96,7 @@ section, .section
   padding-left: 0
   margin: 0
   display: none
+  margin-top: rem(10px)
   li
     display: inline-block
     margin: 0 0 1em
@@ -110,6 +111,7 @@ section, .section
 
 .search-row
   display: none
+  margin-top: rem(10px)
 
 .abre-busca
   svg
@@ -253,8 +255,13 @@ section, .section
       width: rem(20px)
       vertical-align: middle
 
-footer p
-  color: white
+footer
+  background-color: rgba(25, 27, 29, 0.5)
+  padding-top: rem(15px)
+  padding-bottom: rem(15px)
+  p
+    color: white
+    margin: 0
 
 @media screen and (min-width: 728px) 
 
@@ -278,15 +285,21 @@ footer p
       margin-right: 0.5rem;
 
 @media screen and (min-width: 1024px)
+  #menu
+    margin-top: 0
 
   .menu-view
     display: none
 
   .lista-categoria
     display: block
+    margin-top: 0
+
+    li ~ li
+      margin-bottom: rem(10px)
 
   .card-evento
-    width: calc(33.3% - 5px)
+    width: calc(33% - 5px)
 
     &:nth-child(even)
       margin-left: 0;

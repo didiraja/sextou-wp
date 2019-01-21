@@ -102,8 +102,11 @@
 
 	<div class="row">
 		<div class="col-md-12 eventos-wrap d-md-flex">
-		
-			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+			
+			<!-- Loop Principal -->
+			<?php
+				if ( have_posts() ) : while ( have_posts() ) : the_post();
+			?>
 
 				<div class="card-evento">
 

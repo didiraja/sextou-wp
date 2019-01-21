@@ -70,7 +70,7 @@ section, .section {
   margin: 3em 0; }
 
 .menu-view {
-  margin-bottom: 0.625rem; }
+  padding: 0; }
   .menu-view-btn {
     width: 100%;
     font-weight: bold; }
@@ -82,7 +82,8 @@ section, .section {
 .lista-categoria {
   padding-left: 0;
   margin: 0;
-  display: none; }
+  display: none;
+  margin-top: 0.625rem; }
   .lista-categoria li {
     display: inline-block;
     margin: 0 0 1em;
@@ -95,7 +96,8 @@ section, .section {
     text-transform: uppercase; }
 
 .search-row {
-  display: none; }
+  display: none;
+  margin-top: 0.625rem; }
 
 .abre-busca svg {
   width: 1.25rem;
@@ -218,8 +220,13 @@ section, .section {
   width: 1.25rem;
   vertical-align: middle; }
 
-footer p {
-  color: white; }
+footer {
+  background-color: #191b1d;
+  padding-top: 0.9375rem;
+  padding-bottom: 0.9375rem; }
+  footer p {
+    color: white;
+    margin: 0; }
 
 @media screen and (min-width: 728px) {
   h1, .h1 {
@@ -236,12 +243,17 @@ footer p {
       margin-right: 0.5rem; } }
 
 @media screen and (min-width: 1024px) {
+  #menu {
+    margin-top: 0; }
   .menu-view {
     display: none; }
   .lista-categoria {
-    display: block; }
+    display: block;
+    margin-top: 0; }
+    .lista-categoria li ~ li {
+      margin-bottom: 0.625rem; }
   .card-evento {
-    width: calc(33.3% - 5px); }
+    width: calc(33% - 5px); }
     .card-evento:nth-child(even) {
       margin-left: 0; }
     .card-evento:nth-child(odd) {
