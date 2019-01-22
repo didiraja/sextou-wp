@@ -104,7 +104,21 @@
 		<div class="col-md-12 eventos-wrap d-md-flex">
 			
 			<!-- Loop Principal -->
-			<?php
+      <?php
+        $today = date("Y-m-d");
+        query_posts(array(
+          'meta_key' => 'data_evento',
+          'orderby' => 'meta_value',
+          'order' => 'ASC',
+          'meta_query' => array(
+            array(
+              'key' => 'data_evento',
+              'value' => strval($today),
+              'type' => 'date',
+              'compare' => '>=' //(string) - Operator to test. Possible values are '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS' (only in WP >= 3.5), and 'NOT EXISTS' (also only in WP >= 3.5). Default value is '='.
+            )
+         )
+        ));
 				if ( have_posts() ) : while ( have_posts() ) : the_post();
 			?>
 
