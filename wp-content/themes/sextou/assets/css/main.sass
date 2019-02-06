@@ -82,7 +82,6 @@ section, .section
   margin: 3em 0
 
 .menu-view
-  padding: 0
 
   &-btn
     width: 100%
@@ -134,6 +133,11 @@ section, .section
     font-weight: bold
     margin-left: .5rem
 
+.taxonomia-title
+  strong
+    font-size: 3.2rem
+    line-height: rem(38px)
+
 .eventos-wrap
   flex-wrap: wrap
   justify-content: flex-start
@@ -144,101 +148,99 @@ section, .section
   margin-bottom: 1rem
   border: 2px solid white // reforçar a borda nos cantos arredondados
 
-  .card-header
-    padding: 0
-    overflow: hidden
-    border-radius: rem(8px)
-    position: relative
+.card-header
+  padding: 0
+  overflow: hidden
+  border-radius: rem(8px)
+  position: relative
 
-    &:before
-      position: absolute
-      content: ""
-      width: 100%
-      height: 100%
-      background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%); /* FF3.6-15 */
-      background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%); /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#80000000',GradientType=0 ); /* IE6-9 */
-
-  .evento-data-local
+  &:before
     position: absolute
-    bottom: 0
-
-    padding: 0.3rem 0.5rem
-
-    .h1, p
-      margin-bottom: 0
-
-  .evento-title
-    color: white
-
-    font-weight: 700
-    font-style: italic
-    font-size: 1.7rem
-    
-    text-shadow: 1px 1px 0px rgba(0, 0, 0, 1);
-
-  .texto-comum
-    color: white
-    font-size: rem(17px)
-
-    text-shadow: 1px 1px 0px rgba(0, 0, 0, 1);
-
-  .evento-thumb
+    content: ""
     width: 100%
-    height: (6 / 9) * 100%
-    border: 1px solid white  
+    height: 100%
+    background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#80000000',GradientType=0 ); /* IE6-9 */
 
-  .cta-evento
-    padding: .5em .1em .1rem
-    justify-content: space-around
-    > .btn
-      padding: .375rem
-      white-space: initial
-      margin-bottom: 0.4rem
-      display: block
+.evento-data-local
+  position: absolute
+  bottom: 0
 
-  .card-footer
-    background: transparent
-    border: 0
-    padding: 0 .5rem .5rem
-    position: relative
+  padding: 0.3rem 0.5rem
 
-    .link-tag
-      list-style-type: none
-      padding-inline-start: 0
-      margin-bottom: 0
-      overflow-x: scroll
+  .h1, p
+    margin-bottom: 0
 
-      &:after
-        content: "";
-        position: absolute;
-        width: 25px;
-        height: 30px;
-        top: 0;
-        right: 0;
-        background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6ffffff',GradientType=1 ); /* IE6-9 */
+.evento-title
+  color: white
 
-      &::-webkit-scrollbar 
-        display: none
+  font-weight: 700
+  font-style: italic
+  font-size: 1.7rem
+  
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 1);
 
-      li
-        display: inline
-        white-space: pre
+.texto-comum
+  color: white
+  font-size: rem(17px)
 
-      li ~ li:before
-        content: "•"
-        margin: 0 .2rem
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 1);
 
-    .link-tag-item
-      color: black
-      text-decoration: underline
-      font-weight: 600
+.evento-thumb
+  width: 100%
+  height: (6 / 9) * 100%
+  border: 1px solid white  
 
+.cta-evento
+  padding: .5em .1em .1rem
+  justify-content: space-around
+  > .btn
+    padding: .375rem
+    white-space: initial
+    margin-bottom: 0.4rem
+    display: block
 
+.card-footer
+  background: transparent
+  border: 0
+  padding: 0 .5rem .5rem
+  position: relative
+
+  .link-tag
+    list-style-type: none
+    padding-inline-start: 0
+    margin-bottom: 0
+    overflow-x: scroll
+
+    &:after
+      content: "";
+      position: absolute;
+      width: 25px;
+      height: 30px;
+      top: 0;
+      right: 0;
+      background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
+      background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6ffffff',GradientType=1 ); /* IE6-9 */
+
+    &::-webkit-scrollbar 
+      display: none
+
+    li
+      display: inline
+      white-space: pre
+
+    li ~ li:before
+      content: "•"
+      margin: 0 .2rem
+
+  .link-tag-item
+    color: black
+    text-decoration: underline
+    font-weight: 600
 
 .btn-nav--wrap
   display: flex;
@@ -272,6 +274,11 @@ footer
     li
       margin: 0 .2em
   
+  .taxonomia-title
+    margin-bottom: 1.5rem;
+    strong
+      font-size: inherit
+
   .eventos-wrap
     padding: 0
 
