@@ -156,7 +156,32 @@ section, .section {
   overflow: hidden;
   border-radius: 0.5rem;
   position: relative; }
-  .card-header:before {
+
+.evento-data-local {
+  position: absolute;
+  bottom: 0;
+  padding: 0.3rem 0.5rem;
+  z-index: 2; }
+  .evento-data-local .h1, .evento-data-local p {
+    margin-bottom: 0; }
+
+.evento-title {
+  color: white;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.7rem;
+  text-shadow: 2px 2px 0px black; }
+
+.texto-comum {
+  color: white;
+  font-size: 1.0625rem;
+  text-shadow: 1px 1px 0px black; }
+
+.arc-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 66.6%; }
+  .arc-wrap:before {
     position: absolute;
     content: "";
     width: 100%;
@@ -168,31 +193,17 @@ section, .section {
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#80000000',GradientType=0 );
-    /* IE6-9 */ }
-
-.evento-data-local {
-  position: absolute;
-  bottom: 0;
-  padding: 0.3rem 0.5rem; }
-  .evento-data-local .h1, .evento-data-local p {
-    margin-bottom: 0; }
-
-.evento-title {
-  color: white;
-  font-weight: 700;
-  font-style: italic;
-  font-size: 1.7rem;
-  text-shadow: 1px 1px 0px black; }
-
-.texto-comum {
-  color: white;
-  font-size: 1.0625rem;
-  text-shadow: 1px 1px 0px black; }
+    /* IE6-9 */
+    z-index: 1; }
 
 .evento-thumb {
+  border: 1px solid white;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 66.66667%;
-  border: 1px solid white; }
+  height: 100%;
+  object-fit: cover; }
 
 .cta-evento {
   padding: .5em .1em .1rem;
@@ -262,8 +273,6 @@ footer {
     margin: 0; }
 
 @media screen and (min-width: 728px) {
-  h1, .h1 {
-    font-size: 2.5rem; }
   .lista-categoria li {
     margin: 0 .2em; }
   .taxonomia-title {

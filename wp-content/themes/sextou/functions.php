@@ -175,4 +175,21 @@ function posts_link_attributes() {
     return 'class="btn btn-secondary btn-nav"';
 }
 
+ini_set( 'mysql.trace_mode', 0 );
+
+function mytheme_infinite_scroll_init() {
+  add_theme_support(‘infinite-scroll’, array(
+      ‘container’ => ‘content’,
+      ‘render’ => ‘mytheme_infinite_scroll_render’,
+      ‘footer’ => ‘wrapper’,
+      )
+  );
+}
+
+add_action( ‘init’, ‘mytheme_infinite_scroll_init’ );
+
+function mytheme_infinite_scroll_render() {
+  get_template_part( ‘loop’ );
+}
+
 ?>

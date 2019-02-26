@@ -5,11 +5,11 @@
       <?php
 				$today = date("Y-m-d");
 				$search_query = $_GET['s'];
-        query_posts(array(
+        $args = (array(
 					's' => $search_query,
           'meta_key' => 'data_evento',
           'orderby' => 'meta_value',
-          'order' => 'ASC',
+					'order' => 'ASC',
           'meta_query' => array(
             array(
               'key' => 'data_evento',
@@ -17,14 +17,21 @@
               'type' => 'date',
               'compare' => '>='
             )
-         )
-        ));
-				if ( have_posts() ) : while ( have_posts() ) : the_post();
+					)
+				));
+
+				$the_query = new WP_Query( $args );
+				
+				if ( $the_query->have_posts() ) { while ( $the_query->have_posts() ) { $the_query->the_post();
 			?>
 
 				<div class="card-evento">
 
 					<div class="card-header">
+
+						<div class="arc-wrap">
+							<img class="evento-thumb" src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+						</div>
 
 						<div class="evento-data-local">
 							<p class="h1 evento-title">
@@ -45,19 +52,17 @@
 									?>
 								</span>
 							</p>
-						</div>
-						
-						<img class="evento-thumb" src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+						</div>						
 
 					</div>
 
 					<div class="cta-evento">
 
-						<a href="<?php the_field('ingressos_online') ?>" target="_blank" class="btn btn-primary">
+						<a href="<?php $the_query->the_field('ingressos_online') ?>" target="_blank" class="btn btn-primary">
 							Comprar ingresso
 						</a>
 
-						<a href="<?php the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary">
+						<a href="<?php $the_query->the_field('link_evento') ?>" target="_blank" class="btn btn-outline-primary">
 							Mais Informações
 						</a>
 
@@ -94,7 +99,7 @@
 
 				</div>
 			
-			<?php endwhile; ?>
+				<?php } // end while ?>
 
 			<div class="btn-nav--wrap">
 
@@ -107,7 +112,12 @@
 
 			</div>
 
-			<?php endif; ?>
+			<?php
+				} // end inf
+			
+				// Reset Post Data
+				// wp_reset_postdata();
+			?>
 			
 		</div>
 	</div>
