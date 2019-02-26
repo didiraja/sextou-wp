@@ -3,6 +3,7 @@
 			
 			<!-- Loop Principal -->
       <?php
+			$paged = get_query_var('paged') ? get_query_var('paged') : 1;
 				$today = date("Y-m-d");
 				$search_query = $_GET['s'];
         $args = (array(
@@ -10,6 +11,7 @@
           'meta_key' => 'data_evento',
           'orderby' => 'meta_value',
 					'order' => 'ASC',
+		'paged' 			=> $paged,
           'meta_query' => array(
             array(
               'key' => 'data_evento',
@@ -101,16 +103,7 @@
 			
 				<?php } // end while ?>
 
-			<div class="btn-nav--wrap">
-
-				<div class="nav-previous alignleft">
-					<?php next_posts_link('<svg xmlns="http://www.w3.org/2000/svg" viewBox="320 -369.4 1542 1538.9"><path d="M1107 445c-5.3-6-9.7-12.3-13-19v710c0 17.3-4.3 28-13 32s-19.3-.3-32-13L339 445c-12.7-12.7-19-27.7-19-45s6.3-32.3 19-45l710-710c12.7-12.7 23.3-17 32-13s13 14.7 13 32v710a64 64 0 0 1 13-19l710-710c12.7-12.7 23.3-17 32-13s13 14.7 13 32v1472c0 17.3-4.3 28-13 32s-19.3-.3-32-13l-710-710z"/></svg> Eventos antigos'); ?>
-				</div>
-				<div class="nav-next alignright">
-					<?php previous_posts_link('Novos Eventos <svg xmlns="http://www.w3.org/2000/svg" viewBox="320 -369.4 1542 1538.9"><path d="M365 1155c-12.7 12.7-23.3 17-32 13s-13-14.7-13-32V-336c0-17.3 4.3-28 13-32s19.3.3 32 13l710 710a64 64 0 0 1 13 19v-710c0-17.3 4.3-28 13-32s19.3.3 32 13l710 710c12.7 12.7 19 27.7 19 45s-6.3 32.3-19 45l-710 710c-12.7 12.7-23.3 17-32 13s-13-14.7-13-32V426c-3.3 6.7-7.7 13-13 19l-710 710z"/></svg>'); ?>
-				</div>
-
-			</div>
+			<?php get_archive_nav(); ?>
 
 			<?php
 				} // end inf
