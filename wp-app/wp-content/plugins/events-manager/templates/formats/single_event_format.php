@@ -22,7 +22,7 @@
 					<span class="em-icon-clock em-icon"></span>
 					#_EVENTTIMES
 				</div>
-				#_EVENTADDTOCALENDAR
+				<!-- #_EVENTADDTOCALENDAR -->
 			</section>
 	
 			{has_bookings}
@@ -49,7 +49,8 @@
 		</section>
 
 		<section class="em-item-meta-column">
-			{has_location_venue}
+      #_ATTENDEESLIST
+			<!-- {has_location_venue}
 			<section class="em-event-where">
 				<h3><?php esc_html_e('Where', 'events-manager'); ?></h3>
 				<div class="em-item-meta-line em-event-location">
@@ -69,7 +70,7 @@
 					#_EVENTLOCATION
 				</div>
 			</section>
-			{/has_event_location}
+			{/has_event_location} -->
 			
 			{has_taxonomy}
 			<section class="em-item-taxonomies">

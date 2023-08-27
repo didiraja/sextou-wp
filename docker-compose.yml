@@ -35,7 +35,8 @@ services:
       # https://docs.phpmyadmin.net/en/latest/setup.html#docker-environment-variables
       PMA_HOST: db
       PMA_PORT: 3306
-      MYSQL_ROOT_USER: "${DB_ROOT_USER}"
+      PMA_USER: root 
+      PMA_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
     ports:
       - ${IP}:1234:80
