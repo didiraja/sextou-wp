@@ -9,11 +9,11 @@
  *
  * @wordpress-plugin
  * Plugin Name:   Sextou! Social
- * Plugin URI:    https://mydomain.com
+ * Plugin URI:    https://sextou.rio/
  * Description:   Funções Social para Sextou!
  * Version:       1.0.0
  * Author:        Didico
- * Author URI:    https://your-author-domain.com
+ * Author URI:    github.com/didiraja
  * Text Domain:   sextou-social
  * Domain Path:   /languages
  */
