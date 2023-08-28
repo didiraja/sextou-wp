@@ -77,12 +77,11 @@ function SEXTOUSOC()
 SEXTOUSOC();
 
 /**
- * Registers the recipes post type.
+ * Register Event post type
  */
 function register_edit_types()
 {
 
-  // Set UI labels for the recipes post type.
   $labels = array(
     'name' => _x('Eventos', 'Post Type General Name', 'events'),
     'singular_name' => _x('Evento', 'Post Type Singular Name', 'event'),
@@ -99,7 +98,6 @@ function register_edit_types()
     'not_found_in_trash' => __('Não encontrado na lixeira', 'eventos'),
   );
 
-  // Set other arguments for the recipes post type.
   $args = array(
     'label' => __('eventos', 'eventos'),
     'description' => __('Eventos criados na plataforma', 'eventos'),
@@ -130,7 +128,14 @@ function register_edit_types()
     'show_in_rest' => true,
   );
 
-  // Registes the recipes post type.
   register_post_type('recipes', $args);
 }
 add_action('init', 'register_edit_types');
+
+// Remove default Post type from admin sidebar
+function remove_default_post_type()
+{
+  remove_menu_page('edit.php');
+}
+
+add_action('admin_menu', 'remove_default_post_type');

@@ -1,17 +1,14 @@
-## Headless WordPress App with Next.js and WPGraphQL  and Apollo Client 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Docker + Worpress
 
 
+### List of Docker IDs
+  sudo docker ps -aqf "name=wp"
 
+### Enter ID volume
+  docker exec -u root -it <id> /bin/bash
+
+### Allow WP auto delete
+  ```
+    chown -R www-data wp-content
+    chmod -R 755 wp-content
+  ```
