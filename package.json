@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "mount": "docker compose up -d",
+    "restart": "docker compose restart",
+    "unmount": "docker compose down",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
