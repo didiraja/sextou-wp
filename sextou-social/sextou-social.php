@@ -77,6 +77,14 @@ function SEXTOUSOC()
 SEXTOUSOC();
 
 /**
+ * Remove default Post type from admin sidebar
+ */
+function remove_default_post_type()
+{
+  remove_menu_page('edit.php');
+}
+
+/**
  * Register Event post type
  */
 function register_edit_types()
@@ -105,14 +113,13 @@ function register_edit_types()
     'supports' => array(
       'title',
       'editor',
-      'excerpt',
       'author',
       'thumbnail',
       'comments',
       'revisions',
       'custom-fields',
     ),
-    'taxonomies' => array(),
+    'taxonomies' => array('events-metadata'),
     'hierarchical' => false,
     'public' => true,
     'show_ui' => true,
@@ -128,14 +135,55 @@ function register_edit_types()
     'show_in_rest' => true,
   );
 
-  register_post_type('recipes', $args);
+  register_post_type('events', $args);
 }
-add_action('init', 'register_edit_types');
 
-// Remove default Post type from admin sidebar
-function remove_default_post_type()
+/**
+ * Register Event Metadata Taxonomy
+ */
+function register_event_metadata()
 {
-  remove_menu_page('edit.php');
+
+  $metadata = "Metadado";
+  $metadata_plural = $metadata . "s";
+
+  $labels = array(
+    'name' => 'Eventos Metadata',
+    'singular_name' => $metadata,
+    'menu_name' => $metadata_plural,
+    'all_items' => "Todos os $metadata_plural",
+    'edit_item' => "Editar $metadata",
+    'view_item' => "Ver $metadata",
+    'update_item' => "Atualizar $metadata",
+    'add_new_item' => "Adicionar novo $metadata",
+    'new_item_name' => "Novo $metadata",
+    'search_items' => "Buscar $metadata_plural",
+    'popular_items' => "$metadata_plural populares",
+    'separate_items_with_commas' => "Separe $metadata_plural por vírgula",
+    'add_or_remove_items' => "Adicionar ou Remover $metadata",
+    'choose_from_most_used' => "Escolha dentre os $metadata_plural mais usados",
+    'not_found' => "Nenhum $metadata encontrado",
+    'no_terms' => "Nehum $metadata",
+    'items_list_navigation' => "$metadata_plural list navigation",
+    'items_list' => "$metadata_plural list",
+  );
+
+  $args = array(
+    'hierarchical' => true,
+    'labels' => $labels,
+    'public' => true,
+    'show_ui' => true,
+    'show_admin_column' => true,
+    'query_var' => true,
+    'rewrite' => array('slug' => 'event_metadata'),
+    'show_in_rest' => true,
+  );
+
+  register_taxonomy('event_metadata', 'events', $args);
 }
 
 add_action('admin_menu', 'remove_default_post_type');
+
+add_action('init', 'register_edit_types');
+
+add_action('init', 'register_event_metadata');
