@@ -188,3 +188,26 @@ add_action('admin_menu', 'remove_default_post_type');
 add_action('init', 'register_edit_types');
 
 add_action('init', 'register_event_metadata');
+
+/**
+ * Function to update or retrieve RSVP status for a user and an event.
+ *
+ * @param int $user_id  The ID of the user.
+ * @param int $event_id The ID of the event.
+ * @param string $status The RSVP status ('attending' or 'not_attending').
+ *
+ * @return mixed        If $status is provided, it updates the status. Otherwise, it retrieves the status.
+ */
+function set_user_event_rsvp($user_id, $event_id, $status = null)
+{
+  // Define a unique meta key for each event/user combination.
+  $meta_key = 'event_rsvp_' . $event_id;
+
+  if ($status !== null) {
+    // Update RSVP status.
+    update_user_meta($user_id, $meta_key, $status);
+  } else {
+    // Retrieve RSVP status.
+    return get_user_meta($user_id, $meta_key, true);
+  }
+}

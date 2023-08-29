@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "mount": "docker compose up -d",
+    "mount:clean": "docker compose up -V -d",
     "restart": "docker compose restart",
     "unmount": "docker compose down",
     "dev": "next dev",
