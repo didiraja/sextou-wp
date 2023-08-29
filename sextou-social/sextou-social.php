@@ -200,14 +200,21 @@ add_action('init', 'register_event_metadata');
  */
 function set_user_event_rsvp($user_id, $event_id, $status = null)
 {
-  // Define a unique meta key for each event/user combination.
-  $meta_key = 'event_rsvp_' . $event_id;
+  // Get the existing RSVP data for the user.
+  $rsvp_data = get_user_meta($user_id, 'event_rsvp_data', true);
 
+  // If no data exists, initialize an empty array.
+  if (empty($rsvp_data) || !is_array($rsvp_data)) {
+    $rsvp_data = array();
+  }
+
+  // If $status is provided, update the RSVP status for the event.
   if ($status !== null) {
-    // Update RSVP status.
-    update_user_meta($user_id, $meta_key, $status);
+    $rsvp_data[$event_id] = $status;
+    update_user_meta($user_id, 'event_rsvp_data', $rsvp_data);
   } else {
-    // Retrieve RSVP status.
-    return get_user_meta($user_id, $meta_key, true);
+    // Retrieve the RSVP status for the event or default to 'not_attending'.
+    $event_status = isset($rsvp_data[$event_id]) ? $rsvp_data[$event_id] : 'not_attending';
+    return $event_status;
   }
 }
