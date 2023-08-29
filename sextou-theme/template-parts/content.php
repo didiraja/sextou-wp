@@ -21,52 +21,16 @@
 
     if ('events' === get_post_type()) :
     ?>
-      <div class="is-event">
-        <h3>É evento</h3>
 
-        <?php
-        // Get the current user's ID.
-        $user_id = get_current_user_id();
+      <!-- // Get the current user's ID.
+      $user_id = get_current_user_id();
 
-        if (is_user_logged_in()) {
-          $rsvp_status = set_user_event_rsvp($user_id, get_the_ID());
+      if (is_user_logged_in()) {
+        $rsvp_status = get_user_rsvp($user_id, $event_id);
 
-          echo '<p>Your RSVP status: <strong>' . esc_html($rsvp_status) . '</strong></p>';
-        }
-        ?>
+        echo '<p>Your RSVP status: <strong>' . esc_html($rsvp_status) . '</strong></p>';
+      } -->
 
-
-        <?php
-
-
-        if (is_user_logged_in()) {
-
-          $event_id = get_the_ID();
-          $current_status = set_user_event_rsvp($user_id, $event_id);
-
-          $attending_class = $current_status === 'attending' ? 'highlighted' : '';
-          $maybe_class = $current_status === 'maybe' ? 'highlighted' : '';
-          $not_attending_class = $current_status === 'not_attending' ? 'highlighted' : '';
-        ?>
-          <form method="post" action="">
-            <button type="submit" name="rsvp_status" value="attending" class="rsvp-button <?php echo $attending_class; ?>">Attending</button>
-            <button type="submit" name="rsvp_status" value="maybe" class="rsvp-button <?php echo $maybe_class; ?>">Maybe</button>
-            <button type="submit" name="rsvp_status" value="not_attending" class="rsvp-button <?php echo $not_attending_class; ?>">Not Attending</button>
-          </form>
-
-        <?php
-        }
-
-        // Handle the form submission.
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          if (isset($_POST['rsvp_status'])) {
-            $new_status = sanitize_text_field($_POST['rsvp_status']);
-            set_user_event_rsvp($user_id, $event_id, $new_status);
-          }
-        }
-        ?>
-
-      </div>
     <?php endif;
 
     if ('post' === get_post_type()) :

@@ -189,6 +189,20 @@ add_action('init', 'register_edit_types');
 
 add_action('init', 'register_event_metadata');
 
+function get_user_rsvp($user_id, $event_id)
+{
+  $rsvp_data = get_user_meta($user_id, 'event_rsvp_data', true);
+
+  // If no data exists, initialize an empty array.
+  if (empty($rsvp_data) || !is_array($rsvp_data)) {
+    $rsvp_data = array();
+  }
+
+  $event_status = isset($rsvp_data[$event_id]) ? $rsvp_data[$event_id] : 'not_attending';
+
+  return $event_status;
+}
+
 /**
  * Function to update or retrieve RSVP status for a user and an event.
  *
@@ -198,23 +212,30 @@ add_action('init', 'register_event_metadata');
  *
  * @return mixed        If $status is provided, it updates the status. Otherwise, it retrieves the status.
  */
-function set_user_event_rsvp($user_id, $event_id, $status = null)
+function set_user_event_rsvp($user_id, $event_id, $status)
 {
-  // Get the existing RSVP data for the user.
-  $rsvp_data = get_user_meta($user_id, 'event_rsvp_data', true);
+
+  $rsvp_data = get_user_rsvp($user_id, $event_id);
 
   // If no data exists, initialize an empty array.
   if (empty($rsvp_data) || !is_array($rsvp_data)) {
     $rsvp_data = array();
   }
 
+  $rsvp_data[$event_id] = $status;
+  update_user_meta($user_id, 'event_rsvp_data', $rsvp_data);
+
+  return;
+
   // If $status is provided, update the RSVP status for the event.
-  if ($status !== null) {
-    $rsvp_data[$event_id] = $status;
-    update_user_meta($user_id, 'event_rsvp_data', $rsvp_data);
-  } else {
-    // Retrieve the RSVP status for the event or default to 'not_attending'.
-    $event_status = isset($rsvp_data[$event_id]) ? $rsvp_data[$event_id] : 'not_attending';
-    return $event_status;
-  }
+  // if ($status !== null) {
+  //   $rsvp_data[$event_id] = $status;
+  //   update_user_meta($user_id, 'event_rsvp_data', $rsvp_data);
+  // }
+
+  // else {
+  //   // Retrieve the RSVP status for the event or default to 'not_attending'.
+  //   $event_status = isset($rsvp_data[$event_id]) ? $rsvp_data[$event_id] : 'not_attending';
+  //   return $event_status;
+  // }
 }
