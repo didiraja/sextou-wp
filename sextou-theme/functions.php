@@ -294,6 +294,24 @@ add_action('init', 'register_edit_types');
 
 add_action('init', 'register_event_metadata');
 
+// function add_pages_to_dropdown($pages, $r)
+// {
+//   if (!isset($r['name']))
+//     return $pages;
+
+//   if ('page_on_front' == $r['name']) {
+//     $args = array(
+//       'post_type' => 'events'
+//     );
+
+//     $portfolios = get_posts($args);
+//     $pages = array_merge($pages, $portfolios);
+//   }
+
+//   return $pages;
+// }
+// add_filter('get_pages', 'add_pages_to_dropdown', 10, 2);
+
 function get_user_rsvp($user_id, $event_id)
 {
   $rsvp_data = get_user_meta($user_id, 'event_rsvp_data', true);

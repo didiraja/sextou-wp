@@ -19,20 +19,6 @@
       the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
     endif;
 
-    if ('events' === get_post_type()) :
-    ?>
-
-      <!-- // Get the current user's ID.
-      $user_id = get_current_user_id();
-
-      if (is_user_logged_in()) {
-        $rsvp_status = get_user_rsvp($user_id, $event_id);
-
-        echo '<p>Your RSVP status: <strong>' . esc_html($rsvp_status) . '</strong></p>';
-      } -->
-
-    <?php endif;
-
     if ('post' === get_post_type()) :
     ?>
       <div class="entry-meta">

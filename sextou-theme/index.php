@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main template file
  *
@@ -15,42 +16,55 @@
 get_header();
 ?>
 
-	<main id="primary" class="site-main">
+<main id="primary" class="site-main">
 
-		<?php
-		if ( have_posts() ) :
+  <?php
+  // Define the custom query arguments to query 'events' post type.
+  $args = array(
+    'post_type' => 'events', // Specify the custom post type name
+    'posts_per_page' => -1, // Use -1 to fetch all posts, or specify a number
+  );
 
-			if ( is_home() && ! is_front_page() ) :
-				?>
-				<header>
-					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
-				</header>
-				<?php
-			endif;
+  $custom_query = new WP_Query($args);
 
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
+  if ($custom_query->have_posts()) :
 
-				/*
-				 * Include the Post-Type-specific template for the content.
-				 * If you want to override this in a child theme, then include a file
-				 * called content-___.php (where ___ is the Post Type name) and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', get_post_type() );
+    if (is_home() && !is_front_page()) :
+  ?>
+      <header>
+        <h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
+      </header>
+  <?php
+    endif;
 
-			endwhile;
+    /* Start the Loop */
+    while ($custom_query->have_posts()) :
+      $custom_query->the_post();
 
-			the_posts_navigation();
+      /*
+       * Include the Post-Type-specific template for the content.
+       * If you want to override this in a child theme, then include a file
+       * called content-___.php (where ___ is the Post Type name) and that will be used instead.
+       */
+      get_template_part('template-parts/content', 'page');
 
-		else :
+    endwhile;
 
-			get_template_part( 'template-parts/content', 'none' );
+    the_posts_navigation();
 
-		endif;
-		?>
+  else :
 
-	</main><!-- #main -->
+    get_template_part('template-parts/content', 'none');
+
+  endif;
+
+  // Reset the custom query.
+  wp_reset_postdata();
+
+  ?>
+
+</main>
+
 
 <?php
 get_sidebar();
