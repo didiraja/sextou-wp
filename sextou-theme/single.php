@@ -22,7 +22,6 @@ get_header();
     if ('events' === get_post_type()) :
   ?>
       <div class="is-event">
-        <h3>É evento</h3>
 
         <?php
 
@@ -53,8 +52,6 @@ get_header();
           $attend_action = $dir . "/actions/attend-status.php?event=$event_id&user=$user_id";
 
           ?>
-
-          <?php echo plugin_dir_url("") . "sextou-social/sextou-social.php" ?>
 
           <form method="post" action="<?php echo $attend_action ?>">
             <!-- <button type="submit" name="clean_event_data" value="<?php echo $event_id; ?>" class="clean-data-button">Clean Data for This Event</button>
@@ -93,5 +90,5 @@ get_header();
 </main><!-- #main -->
 
 <?php
-get_sidebar();
+// get_sidebar();
 get_footer();

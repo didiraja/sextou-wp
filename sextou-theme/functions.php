@@ -362,3 +362,16 @@ function set_user_event_rsvp($user_id, $event_id, $status)
   //   return $event_status;
   // }
 }
+
+function inject_external_css()
+{
+
+  // Fetch the CSS content
+  $external_css_content = file_get_contents(get_template_directory() . '/custom.css');
+
+  if ($external_css_content) {
+    echo '<style type="text/css">' . $external_css_content . '</style>';
+  }
+}
+
+add_action('wp_head', 'inject_external_css');
