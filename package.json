@@ -1,28 +1,11 @@
 {
-  "name": "wp-frontend",
+  "name": "sextou-social-wp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "mount": "docker compose up -d",
     "mount:clean": "docker compose up -V -d",
     "restart": "docker compose restart",
-    "unmount": "docker compose down",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@apollo/client": "^3.7.4",
-    "@next/font": "13.1.2",
-    "autoprefixer": "^10.4.13",
-    "eslint": "8.32.0",
-    "eslint-config-next": "13.1.2",
-    "graphql": "^16.6.0",
-    "next": "13.1.2",
-    "postcss": "^8.4.21",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwindcss": "^3.2.4"
+    "unmount": "docker compose down"
   }
 }
