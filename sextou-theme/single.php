@@ -48,35 +48,26 @@ get_header();
           $maybe_class = $rsvp_status === 'maybe' ? 'highlighted' : '';
           $not_attending_class = $rsvp_status === 'not_attending' ? 'highlighted' : '';
 
+          $dir = get_template_directory_uri();
+
+          $attend_action = $dir . "/actions/attend-status.php?event=$event_id&user=$user_id";
+
           ?>
 
-          <form method="post" action="">
-            <button type="submit" name="clean_event_data" value="<?php echo $event_id; ?>" class="clean-data-button">Clean Data for This Event</button>
+          <?php echo plugin_dir_url("") . "sextou-social/sextou-social.php" ?>
+
+          <form method="post" action="<?php echo $attend_action ?>">
+            <!-- <button type="submit" name="clean_event_data" value="<?php echo $event_id; ?>" class="clean-data-button">Clean Data for This Event</button>
 
             <br />
-            <br />
+            <br /> -->
 
-            <button type="submit" name="rsvp_status" value="attending" class="rsvp-button <?php echo $attending_class; ?>">Attending</button>
-            <button type="submit" name="rsvp_status" value="maybe" class="rsvp-button <?php echo $maybe_class; ?>">Maybe</button>
-            <button type="submit" name="rsvp_status" value="not_attending" class="rsvp-button <?php echo $not_attending_class; ?>">Not Attending</button>
+            <button type="submit" name="rsvp_status" value="attending" class="rsvp-button <?php echo "" ?>">Attending</button>
+            <button type="submit" name="rsvp_status" value="maybe" class="rsvp-button <?php echo "" ?>">Maybe</button>
+            <button type="submit" name="rsvp_status" value="not_attending" class="rsvp-button <?php echo "" ?>">Not Attending</button>
           </form>
 
         <?php
-
-          // Handle the form submission.
-          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Get the RSVP status from the button's value.
-            $new_status = sanitize_text_field($_POST['rsvp_status']);
-
-            // Replace '123' with the event ID or get it from the loop if applicable.
-            $event_id =  get_the_ID();
-
-            // Get the current user's ID.
-            $user_id = get_current_user_id();
-
-            // Update the RSVP status using the set_user_event_rsvp function.
-            set_user_event_rsvp($user_id, $event_id, $new_status);
-          }
         }
 
         // closing block
