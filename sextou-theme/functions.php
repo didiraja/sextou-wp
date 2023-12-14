@@ -1,377 +1,361 @@
 <?php
 
-/**
- * sextou-theme functions and definitions
- *
- * @link https://developer.wordpress.org/themes/basics/theme-functions/
- *
- * @package sextou-theme
- */
+function order_categories($post)
+{
+  $all_categories = get_the_terms($post->ID, 'category');
 
-if (!defined('_S_VERSION')) {
-  // Replace the version number of the theme on each release.
-  define('_S_VERSION', '1.0.0');
+  $cat_region = array_filter($all_categories, function ($category) {
+    return $category->parent == 30;
+  });
+  $cat_district = array_filter($all_categories, function ($category) {
+    return $category->parent == 31;
+  });
+  $cat_vibe = array_filter($all_categories, function ($category) {
+    return $category->parent == 32;
+  });
+
+  return array_merge($cat_region, $cat_district, $cat_vibe);
 }
 
-/**
- * Sets up theme defaults and registers support for various WordPress features.
- *
- * Note that this function is hooked into the after_setup_theme hook, which
- * runs before the init hook. The init hook is too late for some features, such
- * as indicating support for post thumbnails.
- */
-function sextou_theme_setup()
+function sextou_posts_output($post)
 {
-  /*
-		* Make theme available for translation.
-		* Translations can be filed in the /languages/ directory.
-		* If you're building a theme based on sextou-theme, use a find and replace
-		* to change 'sextou-theme' to the name of your theme in all the template files.
-		*/
-  load_theme_textdomain('sextou-theme', get_template_directory() . '/languages');
+  $event_date = get_field('event_date', $post->ID, false);
+  $formatted_date = date('c', strtotime($event_date));
+  $post_slug = basename(get_permalink($post->ID));
 
-  // Add default posts and comments RSS feed links to head.
-  add_theme_support('automatic-feed-links');
-
-  /*
-		* Let WordPress manage the document title.
-		* By adding theme support, we declare that this theme does not use a
-		* hard-coded <title> tag in the document head, and expect WordPress to
-		* provide it for us.
-		*/
-  add_theme_support('title-tag');
-
-  /*
-		* Enable support for Post Thumbnails on posts and pages.
-		*
-		* @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
-		*/
-  add_theme_support('post-thumbnails');
-
-  // This theme uses wp_nav_menu() in one location.
-  register_nav_menus(
-    array(
-      'menu-1' => esc_html__('Primary', 'sextou-theme'),
-    )
-  );
-
-  /*
-		* Switch default core markup for search form, comment form, and comments
-		* to output valid HTML5.
-		*/
-  add_theme_support(
-    'html5',
-    array(
-      'search-form',
-      'comment-form',
-      'comment-list',
-      'gallery',
-      'caption',
-      'style',
-      'script',
-    )
-  );
-
-  // Set up the WordPress core custom background feature.
-  add_theme_support(
-    'custom-background',
-    apply_filters(
-      'sextou_theme_custom_background_args',
-      array(
-        'default-color' => 'ffffff',
-        'default-image' => '',
-      )
-    )
-  );
-
-  // Add theme support for selective refresh for widgets.
-  add_theme_support('customize-selective-refresh-widgets');
-
-  /**
-   * Add support for core custom logo.
-   *
-   * @link https://codex.wordpress.org/Theme_Logo
-   */
-  add_theme_support(
-    'custom-logo',
-    array(
-      'height'      => 250,
-      'width'       => 250,
-      'flex-width'  => true,
-      'flex-height' => true,
-    )
+  return array(
+    // 'debug' => $post,
+    // 'cat_debug' => $all_categories,
+    'id' => $post->ID,
+    'slug' => $post_slug,
+    'title' => $post->post_title,
+    'event_date' => $formatted_date,
+    'categories' => order_categories($post),
+    'cover' => wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'medium_large')[0],
+    'free' => get_field('free', $post->ID),
+    'tickets' => get_field('tickets', $post->ID),
+    'description' => $post->post_content,
   );
 }
-add_action('after_setup_theme', 'sextou_theme_setup');
 
-/**
- * Set the content width in pixels, based on the theme's design and stylesheet.
- *
- * Priority 0 to make it available to lower priority callbacks.
- *
- * @global int $content_width
- */
-function sextou_theme_content_width()
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// @ @ @ @ CHANGE POST LABEL @ @ @ @ 
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// 
+add_action('init', 'revcon_change_post_object');
+
+function revcon_change_post_object()
 {
-  $GLOBALS['content_width'] = apply_filters('sextou_theme_content_width', 640);
-}
-add_action('after_setup_theme', 'sextou_theme_content_width', 0);
-
-/**
- * Register widget area.
- *
- * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
- */
-function sextou_theme_widgets_init()
-{
-  register_sidebar(
-    array(
-      'name'          => esc_html__('Sidebar', 'sextou-theme'),
-      'id'            => 'sidebar-1',
-      'description'   => esc_html__('Add widgets here.', 'sextou-theme'),
-      'before_widget' => '<section id="%1$s" class="widget %2$s">',
-      'after_widget'  => '</section>',
-      'before_title'  => '<h2 class="widget-title">',
-      'after_title'   => '</h2>',
-    )
-  );
-}
-add_action('widgets_init', 'sextou_theme_widgets_init');
-
-/**
- * Enqueue scripts and styles.
- */
-function sextou_theme_scripts()
-{
-  wp_enqueue_style('sextou-theme-style', get_stylesheet_uri(), array(), _S_VERSION);
-  wp_style_add_data('sextou-theme-style', 'rtl', 'replace');
-
-  wp_enqueue_script('sextou-theme-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true);
-
-  if (is_singular() && comments_open() && get_option('thread_comments')) {
-    wp_enqueue_script('comment-reply');
-  }
-}
-add_action('wp_enqueue_scripts', 'sextou_theme_scripts');
-
-/**
- * Implement the Custom Header feature.
- */
-require get_template_directory() . '/inc/custom-header.php';
-
-/**
- * Custom template tags for this theme.
- */
-require get_template_directory() . '/inc/template-tags.php';
-
-/**
- * Functions which enhance the theme by hooking into WordPress.
- */
-require get_template_directory() . '/inc/template-functions.php';
-
-/**
- * Customizer additions.
- */
-require get_template_directory() . '/inc/customizer.php';
-
-/**
- * Load Jetpack compatibility file.
- */
-if (defined('JETPACK__VERSION')) {
-  require get_template_directory() . '/inc/jetpack.php';
+  $get_post_type = get_post_type_object('post');
+  $labels = $get_post_type->labels;
+  $labels->name = 'Eventos';
+  $labels->singular_name = 'Evento';
+  $labels->add_new = 'Novo Evento';
+  $labels->add_new_item = 'Novo Evento';
+  $labels->edit_item = 'Editar Evento';
+  $labels->new_item = 'Evento';
+  $labels->view_item = 'Ver Evento';
+  $labels->search_items = 'Buscar Evento';
+  $labels->not_found = 'Nenhum Evento encontrado';
+  $labels->not_found_in_trash = 'Nenhum Evento encontrado na Lixeira';
+  $labels->all_items = 'Todos os Eventos';
+  $labels->menu_name = 'Eventos';
+  $labels->name_admin_bar = 'Evento';
+  $get_post_type->menu_icon = 'dashicons-calendar-alt';
 }
 
-/**
- * Remove default Post type from admin sidebar
- */
-function remove_default_post_type()
-{
-  remove_menu_page('edit.php');
-}
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// @ @ @ SEXTOU - MAIN ENDPOINT @ @ @ @ 
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// 
+add_action('rest_api_init', 'create_main_endpoint');
 
 /**
- * Register Event post type
+ * http://sextou.local/wp-api/sextou/v1/events?after=2023-01-01&before=2023-01-22
+ * 
+ * @param "/events"
+ * 
+ * @param after
+ * @param before
+ * @param page
+ * @param per_page
  */
-function register_edit_types()
+function create_main_endpoint()
 {
-
-  $labels = array(
-    'name' => _x('Eventos', 'Post Type General Name', 'events'),
-    'singular_name' => _x('Evento', 'Post Type Singular Name', 'event'),
-    'menu_name' => __('Eventos', 'eventos'),
-    'parent_item_colon' => __('Evento Pai', 'eventos'),
-    'all_items' => __('Todos os Eventos', 'eventos'),
-    'view_item' => __('Ver Evento', 'eventos'),
-    'add_new_item' => __('Adicionar novo Evento', 'eventos'),
-    'add_new' => __('Adicionar novo', 'eventos'),
-    'edit_item' => __('Editar Evento', 'eventos'),
-    'update_item' => __('Atualizar Evento', 'eventos'),
-    'search_items' => __('Buscar Evento', 'eventos'),
-    'not_found' => __('Não encontrado', 'eventos'),
-    'not_found_in_trash' => __('Não encontrado na lixeira', 'eventos'),
-  );
-
-  $args = array(
-    'label' => __('eventos', 'eventos'),
-    'description' => __('Eventos criados na plataforma', 'eventos'),
-    'labels' => $labels,
-    'supports' => array(
-      'title',
-      'editor',
-      'author',
-      'thumbnail',
-      'comments',
-      'revisions',
-      'custom-fields',
+  register_rest_route('sextou/v1', 'events', array(
+    'methods' => 'GET',
+    'callback' => 'main_endpoint_callback',
+    'args' => array(
+      'before' => array(
+        'validate_callback' => function ($param, $request, $key) {
+          return strtotime($param) !== false;
+        },
+      ),
+      'after' => array(
+        'validate_callback' => function ($param, $request, $key) {
+          return strtotime($param) !== false;
+        },
+      ),
     ),
-    'taxonomies' => array('events-metadata'),
-    'hierarchical' => false,
-    'public' => true,
-    'show_ui' => true,
-    'show_in_menu' => true,
-    'show_in_nav_menus' => true,
-    'show_in_admin_bar' => true,
-    'menu_position' => 5,
-    'can_export' => true,
-    'has_archive' => true,
-    'exclude_from_search' => false,
-    'publicly_queryable' => true,
-    'capability_type' => 'post',
-    'show_in_rest' => true,
-    'supports' => array('title')
+  ));
+}
+
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// @ @ @ @ @ ENDPOINT OUTPUT @ @ @ @ @
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// 
+function main_endpoint_callback(WP_REST_Request $request)
+{
+  $before = $request->get_param('before');
+  $after = $request->get_param('after');
+
+  $page = $request->get_param('page') ?: 1;
+  $per_page = $request->get_param('per_page') ?: 8;
+
+  // output if NO before & after params
+  if (empty($before) && empty($after)) {
+    return new WP_Error(
+      'missing_parameters',
+      'before or after parameters are required',
+      array('status' => 400)
+    );
+  }
+
+  $meta_query = array();
+
+  if (!empty($before) && !empty($after)) {
+    $meta_query[] = array(
+      'key' => 'event_date',
+      'compare' => 'BETWEEN',
+      'value' => array($after, $before),
+      'type' => 'DATE'
+    );
+  }
+
+  // if only before filled
+  if (!empty($before)) {
+    $meta_query[] = array(
+      'key' => 'event_date',
+      'compare' => '<=',
+      'value' => $before,
+      'type' => 'DATE'
+    );
+  }
+
+  // if only after filled
+  if (!empty($after)) {
+    $meta_query[] = array(
+      'key' => 'event_date',
+      'compare' => '>=',
+      'value' => $after,
+      'type' => 'DATE'
+    );
+  }
+
+  // Find posts to iterate. Ordered by date from meta_key.
+  $query = new WP_Query(array(
+    'meta_query' => $meta_query,
+    'paged' => $page,
+    'posts_per_page' => $per_page,
+    'orderby' => 'meta_value',
+    'meta_key' => 'event_date',
+    'order' => 'ASC'
+  ));
+
+  $posts = $query->posts;
+  $all_posts = array();
+
+  // create output object from posts
+  foreach ($posts as $post) {
+
+    $item = sextou_posts_output($post);
+    $all_posts[] = $item;
+  }
+
+  // Final Output, now including date beyond posts itself
+  $output = array(
+    'total_posts' => $query->found_posts,
+    'posts' => $all_posts,
   );
 
-  register_post_type('events', $args);
+  return $output;
 }
+
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// @ @ @ SEXTOU - SINGLE ENDPOINT @ @ @ @ 
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// 
+/**
+ * http://sextou.local/wp-api/sextou/v1/event/1234
+ * 
+ * @param "/event"
+ * 
+ * @param id
+ */
+
+add_action('rest_api_init', 'register_event_endpoint');
+
+function register_event_endpoint() {
+  register_rest_route('sextou/v1', '/event/(?P<id>[a-zA-Z0-9-]+)', array(
+    'methods' => 'GET',
+    'callback' => 'get_event_by_id_or_slug', // Updated callback function name
+  ));
+}
+
+function get_event_by_id_or_slug($request) { // Updated function name
+  $event_id_or_slug = $request['id']; // Updated parameter name
+
+  // Check if the parameter contains any numbers (int)
+  preg_match('/\d+/', $event_id_or_slug, $matches);
+  $event_id = !empty($matches) ? absint($matches[0]) : null;
+  
+  if (is_int($event_id)) {
+    // If the parameter contains a number, use get_post to retrieve the post by ID
+    $post = get_post($event_id);
+  } else {
+    // If the parameter does not contain numbers, use get_page_by_path to retrieve the post by slug
+    $post = get_page_by_path($event_id_or_slug, OBJECT, 'post');
+  }
+
+  if (empty($post)) {
+    return new WP_Error('event_not_found', 'Event not found with the specified ID or slug.', array('status' => 404));
+  }
+
+  $post_slug = basename(get_permalink($post->ID));
+  $output = array_merge(
+    array('slug' => $post_slug),
+    sextou_posts_output($post)
+  );
+
+  return $output;
+}
+
+
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// @ @ SEXTOU - CATEGORY ENDPOINT @ @ @
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// 
+add_action('rest_api_init', 'create_category_endpoint');
 
 /**
- * Register Event Metadata Taxonomy
+ * http://sextou.local/wp-api/sextou/v1/category/centro
+ * 
+ * @param "/category"
+ * 
+ * @param slug
  */
-function register_event_metadata()
+function create_category_endpoint()
 {
-
-  $metadata = "Metadado";
-  $metadata_plural = $metadata . "s";
-
-  $labels = array(
-    'name' => 'Eventos Metadata',
-    'singular_name' => $metadata,
-    'menu_name' => $metadata_plural,
-    'all_items' => "Todos os $metadata_plural",
-    'edit_item' => "Editar $metadata",
-    'view_item' => "Ver $metadata",
-    'update_item' => "Atualizar $metadata",
-    'add_new_item' => "Adicionar novo $metadata",
-    'new_item_name' => "Novo $metadata",
-    'search_items' => "Buscar $metadata_plural",
-    'popular_items' => "$metadata_plural populares",
-    'separate_items_with_commas' => "Separe $metadata_plural por vírgula",
-    'add_or_remove_items' => "Adicionar ou Remover $metadata",
-    'choose_from_most_used' => "Escolha dentre os $metadata_plural mais usados",
-    'not_found' => "Nenhum $metadata encontrado",
-    'no_terms' => "Nehum $metadata",
-    'items_list_navigation' => "$metadata_plural list navigation",
-    'items_list' => "$metadata_plural list",
-  );
-
-  $args = array(
-    'hierarchical' => true,
-    'labels' => $labels,
-    'public' => true,
-    'show_ui' => true,
-    'show_admin_column' => true,
-    'query_var' => true,
-    'rewrite' => array('slug' => 'event_metadata'),
-    'show_in_rest' => true,
-  );
-
-  register_taxonomy('event_metadata', 'events', $args);
+  register_rest_route('sextou/v1', 'category/(?P<slug>[\w-]+)', array(
+    'methods' => 'GET',
+    'callback' => 'category_endpoint_callback',
+  ));
 }
 
-add_action('admin_menu', 'remove_default_post_type');
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// @ @ @ @ @ ENDPOINT OUTPUT @ @ @ @ @
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// 
+function category_endpoint_callback(WP_REST_Request $request)
+{
+  $category_slug = $request->get_param('slug');
 
-add_action('init', 'register_edit_types');
+  $page = $request->get_param('page') ?: 1;
+  $per_page = $request->get_param('per_page') ?: 8;
 
-add_action('init', 'register_event_metadata');
+  // output if param is a NUMBER
+  if (is_numeric($category_slug)) {
+    return new WP_Error(
+      'wrong_parameter',
+      'category slug accepts just strings',
+      array('status' => 400)
+    );
+  }
 
-// function add_pages_to_dropdown($pages, $r)
+  $category = get_term_by('slug', $category_slug, 'category');
+
+  if (!$category) {
+    return new WP_Error(
+      'category_not_found',
+      'category not found',
+      array('status' => 404)
+    );
+  }
+
+  $meta_query = array();
+
+  $meta_query =  array(
+    'relation' => 'AND',
+    $meta_query,
+    array(
+      'key' => 'event_date',
+      'value' => date('Ymd'),
+      'compare' => '>=',
+      'type' => 'DATE'
+    )
+  );
+
+  // Find posts to iterate. Ordered by date from meta_key.
+  $query = new WP_Query(array(
+    'category_name' => $category_slug,
+    'meta_query' => $meta_query,
+    'paged' => $page,
+    'posts_per_page' => $per_page,
+    'orderby' => 'meta_value',
+    'meta_key' => 'event_date',
+    'order' => 'ASC'
+  ));
+
+  $posts = $query->posts;
+  $all_posts = array();
+
+  // create output object from posts
+  foreach ($posts as $post) {
+
+    $item = sextou_posts_output($post);
+    $all_posts[] = $item;
+  }
+
+  // Final Output, now including total items beyond posts itself
+  $output = array(
+    'id' => $category->term_id,
+    'slug' => $category->slug,
+    'name' => $category->name,
+    'total_posts' => $query->found_posts,
+    'posts' => $all_posts,
+  );
+
+  return $output;
+}
+
+// // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// // @ @ @ @ PRIVATE AFTER TODAY @ @ @ @
+// // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// // 
+// add_action('daily_status_change', 'change_status_to_private');
+
+// wp_schedule_event(time(), 'daily', 'daily_status_change');
+
+// function change_status_to_private()
 // {
-//   if (!isset($r['name']))
-//     return $pages;
-
-//   if ('page_on_front' == $r['name']) {
-//     $args = array(
-//       'post_type' => 'events'
+//   $args = array(
+//     'post_type' => 'post',
+//     'post_status' => 'publish',
+//     'meta_query' => array(
+//       array(
+//         'key' => 'event_date',
+//         'value' => date('Ymd'),
+//         'compare' => '<'
+//       )
+//     ),
+//     'posts_per_page' => -1
+//   );
+//   $posts = get_posts($args);
+//   foreach ($posts as $post) {
+//     $update = array(
+//       'ID' => $post->ID,
+//       'post_status' => 'private'
 //     );
-
-//     $portfolios = get_posts($args);
-//     $pages = array_merge($pages, $portfolios);
+//     wp_update_post($update);
 //   }
-
-//   return $pages;
 // }
-// add_filter('get_pages', 'add_pages_to_dropdown', 10, 2);
-
-function get_user_rsvp($user_id, $event_id)
-{
-  $rsvp_data = get_user_meta($user_id, 'event_rsvp_data', true);
-
-  // If no data exists, initialize an empty array.
-  if (empty($rsvp_data) || !is_array($rsvp_data)) {
-    $rsvp_data = array();
-  }
-
-  $event_status = isset($rsvp_data[$event_id]) ? $rsvp_data[$event_id] : 'not_attending';
-
-  return $event_status;
-}
-
-/**
- * Function to update or retrieve RSVP status for a user and an event.
- *
- * @param int $user_id  The ID of the user.
- * @param int $event_id The ID of the event.
- * @param string $status The RSVP status ('attending', 'maybe', 'not_attending').
- *
- * @return void
- */
-function set_user_event_rsvp($user_id, $event_id, $status)
-{
-
-  $rsvp_data = get_user_rsvp($user_id, $event_id);
-
-  // If no data exists, initialize an empty array.
-  if (empty($rsvp_data) || !is_array($rsvp_data)) {
-    $rsvp_data = array();
-  }
-
-  $rsvp_data[$event_id] = $status;
-  update_user_meta($user_id, 'event_rsvp_data', $rsvp_data);
-
-  return;
-
-  // If $status is provided, update the RSVP status for the event.
-  // if ($status !== null) {
-  //   $rsvp_data[$event_id] = $status;
-  //   update_user_meta($user_id, 'event_rsvp_data', $rsvp_data);
-  // }
-
-  // else {
-  //   // Retrieve the RSVP status for the event or default to 'not_attending'.
-  //   $event_status = isset($rsvp_data[$event_id]) ? $rsvp_data[$event_id] : 'not_attending';
-  //   return $event_status;
-  // }
-}
-
-function inject_external_css()
-{
-
-  // Fetch the CSS content
-  $external_css_content = file_get_contents(get_template_directory() . '/custom.css');
-
-  if ($external_css_content) {
-    echo '<style type="text/css">' . $external_css_content . '</style>';
-  }
-}
-
-add_action('wp_head', 'inject_external_css');
