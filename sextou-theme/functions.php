@@ -342,7 +342,7 @@ function create_post_with_url(WP_REST_Request $request)
   $errors = array();
 
   foreach ($posts as $post_data) {
-    $required_keys = array('title', 'date', 'description', 'link', 'free', 'cover');
+    $required_keys = array('title', 'date', 'description', 'tickets', 'free', 'cover');
     $missing_keys = array_diff($required_keys, array_keys($post_data));
 
     if (!empty($missing_keys)) {
@@ -353,10 +353,11 @@ function create_post_with_url(WP_REST_Request $request)
     $new_post = array(
       'post_title' => sanitize_text_field($post_data['title']),
       'post_content' => sanitize_text_field($post_data['description']),
+      'post_author' => sanitize_text_field($post_data['author']) || 'calibrate8917',
       'post_status' => 'draft',
       'meta_input' => array(
-        'event_date' => esc_url($post_data['date']),
-        'link' => esc_url($post_data['link']),
+        'event_date' => date('Ymd', strtotime($post_data['date'])),
+        'tickets' => esc_url($post_data['tickets']),
         'free' => (bool) $post_data['free'],
       ),
     );
