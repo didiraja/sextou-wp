@@ -342,7 +342,7 @@ function create_post_with_url(WP_REST_Request $request)
   $errors = array();
 
   foreach ($posts as $post_data) {
-    $required_keys = array('title', 'date', 'description', 'tickets', 'free', 'cover');
+    $required_keys = array('title', 'date', 'description', 'cover');
     $missing_keys = array_diff($required_keys, array_keys($post_data));
 
     if (!empty($missing_keys)) {
