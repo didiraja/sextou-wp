@@ -71,7 +71,7 @@ function revcon_change_post_object()
 add_action('rest_api_init', 'create_main_endpoint');
 
 /**
- * http://sextou.local/wp-api/sextou/v1/events?after=2023-01-01&before=2023-01-22
+ * LOCALHOST/wp-json/sextou/v1/events?after=2023-01-01&before=2023-01-22
  * 
  * @param "/events"
  * 
@@ -186,7 +186,7 @@ function main_endpoint_callback(WP_REST_Request $request)
 // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
 // 
 /**
- * http://sextou.local/wp-api/sextou/v1/event/1234
+ * LOCALHOST/wp-json/sextou/v1/event/1234
  * 
  * @param "/event"
  * 
@@ -195,20 +195,22 @@ function main_endpoint_callback(WP_REST_Request $request)
 
 add_action('rest_api_init', 'register_event_endpoint');
 
-function register_event_endpoint() {
+function register_event_endpoint()
+{
   register_rest_route('sextou/v1', '/event/(?P<id>[a-zA-Z0-9-]+)', array(
     'methods' => 'GET',
     'callback' => 'get_event_by_id_or_slug', // Updated callback function name
   ));
 }
 
-function get_event_by_id_or_slug($request) { // Updated function name
+function get_event_by_id_or_slug($request)
+{ // Updated function name
   $event_id_or_slug = $request['id']; // Updated parameter name
 
   // Check if the parameter contains any numbers (int)
   preg_match('/\d+/', $event_id_or_slug, $matches);
   $event_id = !empty($matches) ? absint($matches[0]) : null;
-  
+
   if (is_int($event_id)) {
     // If the parameter contains a number, use get_post to retrieve the post by ID
     $post = get_post($event_id);
@@ -238,7 +240,7 @@ function get_event_by_id_or_slug($request) { // Updated function name
 add_action('rest_api_init', 'create_category_endpoint');
 
 /**
- * http://sextou.local/wp-api/sextou/v1/category/centro
+ * LOCALHOST/wp-json/sextou/v1/category/centro
  * 
  * @param "/category"
  * 
@@ -284,7 +286,7 @@ function category_endpoint_callback(WP_REST_Request $request)
 
   $meta_query = array();
 
-  $meta_query =  array(
+  $meta_query = array(
     'relation' => 'AND',
     $meta_query,
     array(
@@ -328,34 +330,59 @@ function category_endpoint_callback(WP_REST_Request $request)
   return $output;
 }
 
-// // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
-// // @ @ @ @ PRIVATE AFTER TODAY @ @ @ @
-// // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
-// // 
-// add_action('daily_status_change', 'change_status_to_private');
+function create_post_with_url(WP_REST_Request $request)
+{
+  $posts = $request->get_param('posts');
 
-// wp_schedule_event(time(), 'daily', 'daily_status_change');
+  if (empty($posts) || !is_array($posts)) {
+    return new WP_Error('invalid_data', 'Invalid or missing "posts" parameter.', array('status' => 400));
+  }
 
-// function change_status_to_private()
-// {
-//   $args = array(
-//     'post_type' => 'post',
-//     'post_status' => 'publish',
-//     'meta_query' => array(
-//       array(
-//         'key' => 'event_date',
-//         'value' => date('Ymd'),
-//         'compare' => '<'
-//       )
-//     ),
-//     'posts_per_page' => -1
-//   );
-//   $posts = get_posts($args);
-//   foreach ($posts as $post) {
-//     $update = array(
-//       'ID' => $post->ID,
-//       'post_status' => 'private'
-//     );
-//     wp_update_post($update);
-//   }
-// }
+  foreach ($posts as $post_data) {
+    // Ensure required keys exist in the post data
+    $required_keys = array('title', 'date', 'description', 'link', 'free', 'cover');
+    if (array_diff($required_keys, array_keys($post_data))) {
+      return new WP_Error('invalid_data', 'Invalid post data format.', array('status' => 400));
+    }
+
+    // Create a new post
+    $new_post = array(
+      'post_title' => sanitize_text_field($post_data['title']),
+      'post_content' => sanitize_text_field($post_data['description']),
+      'post_status' => 'draft',
+      'post_date' => date('Y-m-d H:i:s', strtotime($post_data['date'])),
+      'meta_input' => array(
+        'link' => esc_url($post_data['link']),
+        'free' => (bool) $post_data['free'],
+      ),
+    );
+
+    $new_post_id = wp_insert_post($new_post);
+
+    // Handle the cover image
+    $cover_url = esc_url($post_data['cover']);
+    $image_id = media_sideload_image($cover_url, $new_post_id, '', 'id');
+
+    if (!is_wp_error($image_id) && !empty($image_id)) {
+      set_post_thumbnail($new_post_id, $image_id);
+    }
+  }
+
+  return array('success' => true);
+}
+
+add_action('rest_api_init', function () {
+  register_rest_route('sextou/v1', 'create-post', array(
+    'methods' => 'POST',
+    'callback' => 'create_post_with_url',
+    'args' => array(
+      'posts' => array(
+        'required' => true,
+        'validate_callback' => function ($param, $request, $key) {
+          return is_array($param);
+        },
+      ),
+    ),
+  ));
+});
+
