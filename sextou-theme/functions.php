@@ -332,26 +332,30 @@ function category_endpoint_callback(WP_REST_Request $request)
 
 function create_post_with_url(WP_REST_Request $request)
 {
+
   $posts = $request->get_param('posts');
 
   if (empty($posts) || !is_array($posts)) {
     return new WP_Error('invalid_data', 'Invalid or missing "posts" parameter.', array('status' => 400));
   }
 
+  $errors = array();
+
   foreach ($posts as $post_data) {
-    // Ensure required keys exist in the post data
     $required_keys = array('title', 'date', 'description', 'link', 'free', 'cover');
-    if (array_diff($required_keys, array_keys($post_data))) {
-      return new WP_Error('invalid_data', 'Invalid post data format.', array('status' => 400));
+    $missing_keys = array_diff($required_keys, array_keys($post_data));
+
+    if (!empty($missing_keys)) {
+      $errors[] = new WP_Error('invalid_data', 'Missing required keys: ' . implode(', ', $missing_keys), array('status' => 400));
+      continue;
     }
 
-    // Create a new post
     $new_post = array(
       'post_title' => sanitize_text_field($post_data['title']),
       'post_content' => sanitize_text_field($post_data['description']),
       'post_status' => 'draft',
-      'post_date' => date('Y-m-d H:i:s', strtotime($post_data['date'])),
       'meta_input' => array(
+        'event_date' => esc_url($post_data['date']),
         'link' => esc_url($post_data['link']),
         'free' => (bool) $post_data['free'],
       ),
@@ -359,20 +363,46 @@ function create_post_with_url(WP_REST_Request $request)
 
     $new_post_id = wp_insert_post($new_post);
 
-    // Handle the cover image
-    $cover_url = esc_url($post_data['cover']);
-    $image_id = media_sideload_image($cover_url, $new_post_id, '', 'id');
-
-    if (!is_wp_error($image_id) && !empty($image_id)) {
-      set_post_thumbnail($new_post_id, $image_id);
+    if (is_wp_error($new_post_id)) {
+      $errors[] = $new_post_id;
+      continue;
     }
+
+    $cover_url = esc_url($post_data['cover']);
+    $upload = wp_upload_bits(basename($cover_url), null, file_get_contents($cover_url));
+
+    if (!$upload['error']) {
+      $file_path = $upload['file'];
+      $file_name = basename($file_path);
+
+      $attachment_data = array(
+        'post_mime_type' => $upload['type'],
+        'post_title' => sanitize_file_name(pathinfo($file_name, PATHINFO_FILENAME)),
+        'post_content' => '',
+        'post_status' => 'inherit',
+      );
+
+      $attachment_id = wp_insert_attachment($attachment_data, $file_path, $new_post_id);
+
+      if (!is_wp_error($attachment_id)) {
+        set_post_thumbnail($new_post_id, $attachment_id);
+      } else {
+        $errors[] = new WP_Error('image_attachment_error', 'Error attaching image to post.', array('status' => 500));
+      }
+    } else {
+      $errors[] = new WP_Error('image_upload_error', 'Error uploading image to media library.', array('status' => 500));
+    }
+  }
+
+  if (!empty($errors)) {
+    return $errors;
   }
 
   return array('success' => true);
 }
 
 add_action('rest_api_init', function () {
-  register_rest_route('sextou/v1', 'create-post', array(
+  register_rest_route('sextou/v1', '/create-post/', array(
     'methods' => 'POST',
     'callback' => 'create_post_with_url',
     'args' => array(
