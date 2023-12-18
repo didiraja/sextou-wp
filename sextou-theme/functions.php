@@ -356,7 +356,7 @@ function create_post_with_url(WP_REST_Request $request)
       'post_author' => sanitize_text_field($post_data['author']) || 'calibrate8917',
       'post_status' => 'draft',
       'meta_input' => array(
-        'event_date' => date('Ymd', strtotime($post_data['date'])),
+        'event_date' => date('Y-m-d H:i:s', strtotime($post_data['date'])),
         'tickets' => esc_url($post_data['tickets']),
         'free' => (bool) $post_data['free'],
       ),
