@@ -1,21 +1,5 @@
 <?php
 
-function order_categories($post)
-{
-  $all_categories = get_the_terms($post->ID, 'category');
-
-  $cat_region = array_filter($all_categories, function ($category) {
-    return $category->parent == 30;
-  });
-  $cat_district = array_filter($all_categories, function ($category) {
-    return $category->parent == 31;
-  });
-  $cat_vibe = array_filter($all_categories, function ($category) {
-    return $category->parent == 32;
-  });
-
-  return array_merge($cat_region, $cat_district, $cat_vibe);
-}
 
 // Custom function to sort categories based on their farthest parent
 function order_method($a, $b)
@@ -30,7 +14,7 @@ function order_method($a, $b)
   return $farthestParentA - $farthestParentB;
 }
 
-function order_categories_v2($post_id)
+function order_categories($post_id)
 {
   // Get the categories assigned to the current post
   $post_categories = get_the_category($post_id);
@@ -47,7 +31,8 @@ function sextou_posts_output($post)
   $event_date = get_field('event_date', $post->ID, false);
   $formatted_date = date('c', strtotime($event_date));
   $post_slug = basename(get_permalink($post->ID));
-  $all_categories = get_the_category($post->ID);
+  $thumbnail_id = get_post_thumbnail_id($post->ID);
+  // $all_categories = get_the_category($post->ID);
 
   return array(
     // 'debug' => $post,
@@ -56,8 +41,8 @@ function sextou_posts_output($post)
     'slug' => $post_slug,
     'title' => $post->post_title,
     'event_date' => $formatted_date,
-    'categories' => order_categories_v2($post->ID),
-    'cover' => wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'medium_large')[0],
+    'categories' => order_categories($post->ID),
+    'cover' => wp_get_attachment_metadata($thumbnail_id),
     'free' => get_field('free', $post->ID),
     'tickets' => get_field('tickets', $post->ID),
     'description' => $post->post_content,
