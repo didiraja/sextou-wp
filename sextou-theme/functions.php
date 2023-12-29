@@ -17,11 +17,37 @@ function order_categories($post)
   return array_merge($cat_region, $cat_district, $cat_vibe);
 }
 
+// Custom function to sort categories based on their farthest parent
+function order_method($a, $b)
+{
+  $ancestorsA = get_ancestors($a->term_id, 'category');
+  $ancestorsB = get_ancestors($b->term_id, 'category');
+
+  // Get the farthest ancestor (parent)
+  $farthestParentA = empty($ancestorsA) ? $a->term_id : end($ancestorsA);
+  $farthestParentB = empty($ancestorsB) ? $b->term_id : end($ancestorsB);
+
+  return $farthestParentA - $farthestParentB;
+}
+
+function order_categories_v2($post_id)
+{
+  // Get the categories assigned to the current post
+  $post_categories = get_the_category($post_id);
+
+  // Sort categories using the custom function
+  usort($post_categories, 'order_method');
+
+  // Return the sorted categories
+  return $post_categories;
+}
+
 function sextou_posts_output($post)
 {
   $event_date = get_field('event_date', $post->ID, false);
   $formatted_date = date('c', strtotime($event_date));
   $post_slug = basename(get_permalink($post->ID));
+  $all_categories = get_the_category($post->ID);
 
   return array(
     // 'debug' => $post,
@@ -30,7 +56,7 @@ function sextou_posts_output($post)
     'slug' => $post_slug,
     'title' => $post->post_title,
     'event_date' => $formatted_date,
-    'categories' => order_categories($post),
+    'categories' => order_categories_v2($post->ID),
     'cover' => wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'medium_large')[0],
     'free' => get_field('free', $post->ID),
     'tickets' => get_field('tickets', $post->ID),
@@ -82,22 +108,26 @@ add_action('rest_api_init', 'create_main_endpoint');
  */
 function create_main_endpoint()
 {
-  register_rest_route('sextou/v1', 'events', array(
-    'methods' => 'GET',
-    'callback' => 'main_endpoint_callback',
-    'args' => array(
-      'before' => array(
-        'validate_callback' => function ($param, $request, $key) {
-          return strtotime($param) !== false;
-        },
+  register_rest_route(
+    'sextou/v1',
+    'events',
+    array(
+      'methods' => 'GET',
+      'callback' => 'main_endpoint_callback',
+      'args' => array(
+        'before' => array(
+          'validate_callback' => function ($param, $request, $key) {
+            return strtotime($param) !== false;
+          },
+        ),
+        'after' => array(
+          'validate_callback' => function ($param, $request, $key) {
+            return strtotime($param) !== false;
+          },
+        ),
       ),
-      'after' => array(
-        'validate_callback' => function ($param, $request, $key) {
-          return strtotime($param) !== false;
-        },
-      ),
-    ),
-  ));
+    )
+  );
 }
 
 // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
@@ -153,14 +183,139 @@ function main_endpoint_callback(WP_REST_Request $request)
   }
 
   // Find posts to iterate. Ordered by date from meta_key.
-  $query = new WP_Query(array(
-    'meta_query' => $meta_query,
-    'paged' => $page,
-    'posts_per_page' => $per_page,
-    'orderby' => 'meta_value',
-    'meta_key' => 'event_date',
-    'order' => 'ASC'
-  ));
+  $query = new WP_Query(
+    array(
+      'meta_query' => $meta_query,
+      'paged' => $page,
+      'posts_per_page' => $per_page,
+      'orderby' => 'meta_value',
+      'meta_key' => 'event_date',
+      'order' => 'ASC'
+    )
+  );
+
+  $posts = $query->posts;
+  $all_posts = array();
+
+  // create output object from posts
+  foreach ($posts as $post) {
+
+    $item = sextou_posts_output($post);
+    $all_posts[] = $item;
+  }
+
+  // Final Output, now including date beyond posts itself
+  $output = array(
+    'total_posts' => $query->found_posts,
+    'posts' => $all_posts,
+  );
+
+  return $output;
+}
+
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// @ @ @ MAIN ENDPOINT V2 @ @ @ @ 
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// 
+add_action('rest_api_init', 'create_main_endpoint_v2');
+
+/**
+ * LOCALHOST/wp-json/sextou/v1/events?after=2023-01-01&before=2023-01-22
+ * 
+ * @param "/events"
+ * 
+ * @param after
+ * @param before
+ * @param page
+ * @param per_page
+ */
+function create_main_endpoint_v2()
+{
+  register_rest_route(
+    'sextou/v1',
+    '__events',
+    array(
+      'methods' => 'GET',
+      'callback' => 'main_endpoint_callback_v2',
+      'args' => array(
+        'before' => array(
+          'validate_callback' => function ($param, $request, $key) {
+            return strtotime($param) !== false;
+          },
+        ),
+        'after' => array(
+          'validate_callback' => function ($param, $request, $key) {
+            return strtotime($param) !== false;
+          },
+        ),
+      ),
+    )
+  );
+}
+
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// @ @ @ @ @ ENDPOINT OUTPUT @ @ @ @ @
+// @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
+// 
+function main_endpoint_callback_v2(WP_REST_Request $request)
+{
+  $before = $request->get_param('before');
+  $after = $request->get_param('after');
+
+  $page = $request->get_param('page') ?: 1;
+  $per_page = $request->get_param('per_page') ?: 12;
+
+  // output if NO before & after params
+  if (empty($before) && empty($after)) {
+    return new WP_Error(
+      'missing_parameters',
+      'before or after parameters are required',
+      array('status' => 400)
+    );
+  }
+
+  $meta_query = array();
+
+  if (!empty($before) && !empty($after)) {
+    $meta_query[] = array(
+      'key' => 'event_date',
+      'compare' => 'BETWEEN',
+      'value' => array($after, $before),
+      'type' => 'DATE'
+    );
+  }
+
+  // if only before filled
+  if (!empty($before)) {
+    $meta_query[] = array(
+      'key' => 'event_date',
+      'compare' => '<=',
+      'value' => $before,
+      'type' => 'DATE'
+    );
+  }
+
+  // if only after filled
+  if (!empty($after)) {
+    $meta_query[] = array(
+      'key' => 'event_date',
+      'compare' => '>=',
+      'value' => $after,
+      'type' => 'DATE'
+    );
+  }
+
+  // Find posts to iterate. Ordered by date from meta_key.
+  $query = new WP_Query(
+    array(
+      'meta_query' => $meta_query,
+      'paged' => $page,
+      'posts_per_page' => $per_page,
+      'orderby' => 'meta_value',
+      'meta_key' => 'event_date',
+      'order' => 'ASC'
+    )
+  );
 
   $posts = $query->posts;
   $all_posts = array();
@@ -197,10 +352,14 @@ add_action('rest_api_init', 'register_event_endpoint');
 
 function register_event_endpoint()
 {
-  register_rest_route('sextou/v1', '/event/(?P<id>[a-zA-Z0-9-]+)', array(
-    'methods' => 'GET',
-    'callback' => 'get_event_by_id_or_slug', // Updated callback function name
-  ));
+  register_rest_route(
+    'sextou/v1',
+    '/event/(?P<id>[a-zA-Z0-9-]+)',
+    array(
+      'methods' => 'GET',
+      'callback' => 'get_event_by_id_or_slug', // Updated callback function name
+    )
+  );
 }
 
 function get_event_by_id_or_slug($request)
@@ -248,10 +407,14 @@ add_action('rest_api_init', 'create_category_endpoint');
  */
 function create_category_endpoint()
 {
-  register_rest_route('sextou/v1', 'category/(?P<slug>[\w-]+)', array(
-    'methods' => 'GET',
-    'callback' => 'category_endpoint_callback',
-  ));
+  register_rest_route(
+    'sextou/v1',
+    'category/(?P<slug>[\w-]+)',
+    array(
+      'methods' => 'GET',
+      'callback' => 'category_endpoint_callback',
+    )
+  );
 }
 
 // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
@@ -298,15 +461,17 @@ function category_endpoint_callback(WP_REST_Request $request)
   );
 
   // Find posts to iterate. Ordered by date from meta_key.
-  $query = new WP_Query(array(
-    'category_name' => $category_slug,
-    'meta_query' => $meta_query,
-    'paged' => $page,
-    'posts_per_page' => $per_page,
-    'orderby' => 'meta_value',
-    'meta_key' => 'event_date',
-    'order' => 'ASC'
-  ));
+  $query = new WP_Query(
+    array(
+      'category_name' => $category_slug,
+      'meta_query' => $meta_query,
+      'paged' => $page,
+      'posts_per_page' => $per_page,
+      'orderby' => 'meta_value',
+      'meta_key' => 'event_date',
+      'order' => 'ASC'
+    )
+  );
 
   $posts = $query->posts;
   $all_posts = array();
@@ -403,17 +568,21 @@ function create_post_with_url(WP_REST_Request $request)
 }
 
 add_action('rest_api_init', function () {
-  register_rest_route('sextou/v1', '/create-post/', array(
-    'methods' => 'POST',
-    'callback' => 'create_post_with_url',
-    'args' => array(
-      'posts' => array(
-        'required' => true,
-        'validate_callback' => function ($param, $request, $key) {
-          return is_array($param);
-        },
+  register_rest_route(
+    'sextou/v1',
+    '/create-post/',
+    array(
+      'methods' => 'POST',
+      'callback' => 'create_post_with_url',
+      'args' => array(
+        'posts' => array(
+          'required' => true,
+          'validate_callback' => function ($param, $request, $key) {
+            return is_array($param);
+          },
+        ),
       ),
-    ),
-  ));
+    )
+  );
 });
 
