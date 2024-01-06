@@ -266,6 +266,10 @@ add_action('rest_api_init', 'create_category_endpoint');
  * @param "/category"
  * 
  * @param slug
+ * @param after
+ * @param before
+ * @param page
+ * @param per_page
  */
 function create_category_endpoint()
 {
@@ -275,6 +279,18 @@ function create_category_endpoint()
     array(
       'methods' => 'GET',
       'callback' => 'category_endpoint_callback',
+      'args' => array(
+        'before' => array(
+          'validate_callback' => function ($param, $request, $key) {
+            return strtotime($param) !== false;
+          },
+        ),
+        'after' => array(
+          'validate_callback' => function ($param, $request, $key) {
+            return strtotime($param) !== false;
+          },
+        ),
+      ),
     )
   );
 }
@@ -286,6 +302,9 @@ function create_category_endpoint()
 function category_endpoint_callback(WP_REST_Request $request)
 {
   $category_slug = $request->get_param('slug');
+
+  $before = $request->get_param('before');
+  $after = $request->get_param('after');
 
   $page = $request->get_param('page') ?: 1;
   $per_page = $request->get_param('per_page') ?: 8;
@@ -311,16 +330,38 @@ function category_endpoint_callback(WP_REST_Request $request)
 
   $meta_query = array();
 
-  $meta_query = array(
-    'relation' => 'AND',
-    $meta_query,
-    array(
+  if (!empty($before) && !empty($after)) {
+    $meta_query = array(
+      'relation' => 'AND',
+      $meta_query,
+      array(
+        'key' => 'event_date',
+        'value' => date('Ymd'),
+        'compare' => '>=',
+        'type' => 'DATE'
+      )
+    );
+  }
+
+
+  if (!empty($before)) {
+    $meta_query[] = array(
       'key' => 'event_date',
-      'value' => date('Ymd'),
-      'compare' => '>=',
+      'compare' => '<=',
+      'value' => $before,
       'type' => 'DATE'
-    )
-  );
+    );
+  }
+
+  // if only after filled
+  if (!empty($after)) {
+    $meta_query[] = array(
+      'key' => 'event_date',
+      'compare' => '>=',
+      'value' => $after,
+      'type' => 'DATE'
+    );
+  }
 
   // Find posts to iterate. Ordered by date from meta_key.
   $query = new WP_Query(
