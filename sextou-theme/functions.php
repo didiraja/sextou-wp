@@ -49,6 +49,8 @@ function sextou_posts_output($post)
   );
 }
 
+$ITEMS_PER_PAGE = 12;
+
 // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
 // @ @ @ @ CHANGE POST LABEL @ @ @ @ 
 // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
@@ -121,11 +123,14 @@ function create_main_endpoint()
 // 
 function main_endpoint_callback(WP_REST_Request $request)
 {
+
+  global $ITEMS_PER_PAGE;
+
   $before = $request->get_param('before');
   $after = $request->get_param('after');
 
   $page = $request->get_param('page') ?: 1;
-  $per_page = $request->get_param('per_page') ?: 8;
+  $per_page = $request->get_param('per_page') ?: $ITEMS_PER_PAGE;
 
   // output if NO before & after params
   if (empty($before) && empty($after)) {
@@ -301,13 +306,16 @@ function create_category_endpoint()
 // 
 function category_endpoint_callback(WP_REST_Request $request)
 {
+
+  global $ITEMS_PER_PAGE;
+
   $category_slug = $request->get_param('slug');
 
   $before = $request->get_param('before');
   $after = $request->get_param('after');
 
   $page = $request->get_param('page') ?: 1;
-  $per_page = $request->get_param('per_page') ?: 8;
+  $per_page = $request->get_param('per_page') ?: $ITEMS_PER_PAGE;
 
   // output if param is a NUMBER
   if (is_numeric($category_slug)) {
