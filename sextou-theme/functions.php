@@ -430,7 +430,7 @@ function create_post_with_url(WP_REST_Request $request)
       'post_title' => sanitize_text_field($post_data['title']),
       'post_content' => sanitize_text_field($post_data['description']),
       'post_author' => sanitize_text_field($post_data['author']) || 'calibrate8917',
-      'post_status' => 'draft',
+      'post_status' => 'publish',
       'meta_input' => array(
         'event_date' => date('Y-m-d H:i:s', strtotime($post_data['date'])),
         'tickets' => esc_url($post_data['tickets']),
@@ -478,7 +478,8 @@ function create_post_with_url(WP_REST_Request $request)
   return array('success' => true);
 }
 
-add_action('rest_api_init', function () {
+function endpoint_create_post()
+{
   register_rest_route(
     'sextou/v1',
     '/create-post/',
@@ -495,5 +496,7 @@ add_action('rest_api_init', function () {
       ),
     )
   );
-});
+}
+
+add_action('rest_api_init', 'endpoint_create_post');
 
