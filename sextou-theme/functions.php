@@ -88,10 +88,10 @@ add_action('rest_api_init', 'create_main_endpoint');
  * 
  * @param "/events"
  * 
- * @param after
- * @param before
- * @param page
- * @param per_page
+ * @param {after}
+ * @param {before}
+ * @param {page}
+ * @param {per_page}
  */
 function create_main_endpoint()
 {
@@ -212,7 +212,7 @@ function main_endpoint_callback(WP_REST_Request $request)
  * 
  * @param "/event"
  * 
- * @param id
+ * @param {id}
  */
 
 add_action('rest_api_init', 'register_event_endpoint');
@@ -270,11 +270,11 @@ add_action('rest_api_init', 'create_category_endpoint');
  * 
  * @param "/category"
  * 
- * @param slug
- * @param after
- * @param before
- * @param page
- * @param per_page
+ * @param {slug}
+ * @param {after}
+ * @param {before}
+ * @param {page}
+ * @param {per_page}
  */
 function create_category_endpoint()
 {
@@ -500,3 +500,50 @@ function endpoint_create_post()
 
 add_action('rest_api_init', 'endpoint_create_post');
 
+function check_post_by_tickets(WP_REST_Request $request)
+{
+  $tickets_param = $request->get_param('tickets');
+
+  // Query to check if a post with the specified tickets exists
+  $post_query = new WP_Query(
+    array(
+      'post_type' => 'post', // Adjust post type as needed
+      'meta_query' => array(
+        array(
+          'key' => 'tickets', // Adjust ACF field key as needed
+          'value' => $tickets_param,
+        ),
+      ),
+    )
+  );
+
+  if ($post_query->have_posts()) {
+    // Post with the specified tickets exists
+    return array('exists' => true);
+  } else {
+    // Post with the specified tickets does not exist
+    return array('exists' => false);
+  }
+}
+
+function endpoint_check_post_is_published()
+{
+  register_rest_route(
+    'sextou/v1',
+    '/check-post-by-tickets/',
+    array(
+      'methods' => 'GET',
+      'callback' => 'check_post_by_tickets',
+      'args' => array(
+        'tickets' => array(
+          'required' => true,
+          'validate_callback' => function ($param, $request, $key) {
+            return is_string($param);
+          },
+        ),
+      ),
+    )
+  );
+}
+
+add_action('rest_api_init', 'endpoint_check_post_is_published');
