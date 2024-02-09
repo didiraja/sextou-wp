@@ -49,6 +49,28 @@ function sextou_posts_output($post)
   );
 }
 
+function does_file_exists($filename)
+{
+  global $wpdb;
+
+  // Your SQL query
+  $query = $wpdb->prepare("SELECT * FROM {$wpdb->postmeta} WHERE meta_value LIKE %s LIMIT 1", '%' . $wpdb->esc_like($filename));
+
+  // Run the query and get the first result
+  // "meta_id": "25508",
+  // "post_id": "6656",
+  // "meta_key": "_wp_attached_file",
+  // "meta_value": "2024/01/Qjb2uRh.jpg"
+  $result = $wpdb->get_row($query);
+
+  // Check if a result is found
+  if ($result) {
+    return $result;
+  } else {
+    return null;
+  }
+}
+
 $ITEMS_PER_PAGE = 12;
 
 // @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @
@@ -446,28 +468,69 @@ function create_post_with_url(WP_REST_Request $request)
     }
 
     $cover_url = esc_url($post_data['cover']);
-    $upload = wp_upload_bits(basename($cover_url), null, file_get_contents($cover_url));
+    $image_filename = pathinfo($cover_url, PATHINFO_BASENAME);
+    $thumb_data = does_file_exists($image_filename);
 
-    if (!$upload['error']) {
+    // $thumb_data->meta_id
+    if (null === $thumb_data) {
+
+      $upload = wp_upload_bits(basename($cover_url), null, file_get_contents($cover_url));
+
       $file_path = $upload['file'];
       $file_name = basename($file_path);
 
-      $attachment_data = array(
-        'post_mime_type' => $upload['type'],
-        'post_title' => sanitize_file_name(pathinfo($file_name, PATHINFO_FILENAME)),
-        'post_content' => '',
-        'post_status' => 'inherit',
-      );
+      if (!$upload['error']) {
+        $attachment_data = array(
+          'post_mime_type' => $upload['type'],
+          'post_title' => sanitize_file_name(pathinfo($file_name, PATHINFO_FILENAME)),
+          'post_content' => '',
+          'post_status' => 'inherit',
+        );
 
-      $attachment_id = wp_insert_attachment($attachment_data, $file_path, $new_post_id);
+        $attachment_id = wp_insert_attachment($attachment_data, $file_path, $new_post_id);
 
-      if (!is_wp_error($attachment_id)) {
-        set_post_thumbnail($new_post_id, $attachment_id);
+        if (!is_wp_error($attachment_id)) {
+          set_post_thumbnail($new_post_id, $attachment_id);
+        } else {
+          $errors[] = new WP_Error('image_attachment_error', 'Error attaching image to post.', array('status' => 500));
+        }
       } else {
-        $errors[] = new WP_Error('image_attachment_error', 'Error attaching image to post.', array('status' => 500));
+        $errors[] = new WP_Error('image_upload_error', 'Error uploading image to media library.', array('status' => 500));
       }
+
     } else {
-      $errors[] = new WP_Error('image_upload_error', 'Error uploading image to media library.', array('status' => 500));
+
+      // NOT WORKING, ATTACHING BUT UPLOADING ANOTHER IMAGE
+
+      // error_log("chegou no else!");
+
+      // $wp_upload_dir = wp_upload_dir();
+      // // $filename should be the path to a file in the upload directory.
+      // $filename = $wp_upload_dir['baseurl'] . '/' . $thumb_data->meta_value;
+
+      // // Check the type of file. We'll use this as the 'post_mime_type'.
+      // $filetype = wp_check_filetype(basename($filename), null);
+
+      // // Prepare an array of post data for the attachment.
+      // $attachment = array(
+      //   'guid' => $wp_upload_dir['baseurl'] . '/' . basename($filename),
+      //   'post_mime_type' => $filetype['type'],
+      //   'post_title' => preg_replace('/\.[^.]+$/', '', basename($filename)),
+      //   'post_content' => '',
+      //   'post_status' => 'inherit'
+      // );
+
+      // // Insert the attachment.
+      // $attach_id = wp_insert_attachment($attachment, $filename, $new_post_id);
+
+      // // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+      // require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+      // // Generate the metadata for the attachment, and update the database record.
+      // $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
+      // wp_update_attachment_metadata($attach_id, $attach_data);
+
+      // set_post_thumbnail($new_post_id, $attach_id);
     }
   }
 
@@ -475,7 +538,9 @@ function create_post_with_url(WP_REST_Request $request)
     return $errors;
   }
 
-  return array('success' => true);
+  return array(
+    'success' => true,
+  );
 }
 
 function endpoint_create_post()
